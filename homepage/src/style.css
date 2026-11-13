@@ -22,3 +22,11 @@ blockquote p { font-size: clamp(20px, 3vw, 32px); max-width: 30em; }
 /* fade/slide in on reveal */
 .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s, transform .8s; }
 .reveal.visible { opacity: 1; transform: none; }
+
+/* alternate the text side; the rocket parks on the opposite side */
+main > :nth-child(even) { align-items: flex-end; text-align: right; }
+main > :nth-child(odd) { align-items: flex-start; text-align: left; }
+header > *, section > *, blockquote > * { max-width: 34em; }
+@media (max-width: 700px) {
+  main > :nth-child(n) { align-items: flex-start; text-align: left; justify-content: flex-start; padding-top: 18vh; }
+}
