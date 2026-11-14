@@ -452,8 +452,8 @@ renderer.setAnimationLoop(time => {
   current += (target - current) * (1 - Math.exp(-dt * 6));
 
   // which hop are we on; dwell at each planet, fly in between
-  const T = clamp(current, 0, 2 * N - 1);
-  const pk = Math.min(Math.floor(T / 2), N - 1), ph = T - 2 * pk;
+  const tl = clamp(current, 0, 2 * N - 1);
+  const pk = Math.min(Math.floor(tl / 2), N - 1), ph = tl - 2 * pk;
   const orbiting = ph < 1 && pk > 0; // Earth: the rocket waits on its launch pad instead
   const s = pk + Math.max(0, ph - 1);
   const i = Math.min(Math.floor(s), N - 2);
