@@ -71,3 +71,21 @@ a { color: var(--accent); text-underline-offset: 4px; }
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 .pair figcaption { margin-top: 8px; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+
+/* computer vision: documentation link as a pill, no underline */
+.doc { margin: 18px 0 26px !important; }
+.doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: rgba(255, 138, 92, 0.08);
+  transition: background 0.2s, transform 0.2s;
+}
+.doc-link:hover { background: rgba(255, 138, 92, 0.2); transform: translateY(-2px); }
+.doc-lang { font-weight: 400; opacity: 0.7; }
