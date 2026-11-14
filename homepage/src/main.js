@@ -399,28 +399,25 @@ function layout() {
   updateTarget();
 }
 
-// Scroll: the planets follow the text sections, so a tall section keeps its planet in view
+// Scroll timeline: each planet has an orbit phase while its text is read (T = 2k .. 2k+1)
+// followed by a flight phase to the next planet (T = 2k+1 .. 2k+2)
 let target = 0, current = 0, marks = [];
 function measure() {
   const max = document.documentElement.scrollHeight - innerHeight;
   marks = [...document.querySelectorAll('main > section')].map(el => {
     const top = el.offsetTop, h = el.offsetHeight;
-    // tall sections dwell from top-aligned to bottom-aligned, short ones when centred
-    return h > innerHeight ? { a: top, b: top + h - innerHeight } : { a: top + h / 2 - innerHeight / 2, b: top + h / 2 - innerHeight / 2 };
+    return { a: top - 0.25 * innerHeight, b: top + h - 0.75 * innerHeight };
   });
-  if (marks.length) { marks[0].a = 0; marks[marks.length - 1].b = Math.max(max, marks[marks.length - 1].a); }
+  if (marks.length) { marks[0].a = 0; marks[marks.length - 1].b = Math.max(max, marks[marks.length - 1].a + 1); }
 }
 function updateTarget() {
   const y = scrollY, n = Math.min(marks.length, N);
-  target = 1;
-  if (n < 2) { target = 0; return; }
-  for (let k = 0; k < n - 1; k++) {
-    if (y < marks[k + 1].a) {
-      target = (k + clamp((y - marks[k].b) / Math.max(1, marks[k + 1].a - marks[k].b), 0, 1)) / (N - 1);
-      return;
-    }
+  for (let k = 0; k < n; k++) {
+    const { a, b } = marks[k];
+    if (y <= b) { target = 2 * k + clamp((y - a) / Math.max(1, b - a), 0, 1); return; }
+    if (k < n - 1 && y < marks[k + 1].a) { target = 2 * k + 1 + (y - b) / Math.max(1, marks[k + 1].a - b); return; }
   }
-  target = (n - 1) / (N - 1);
+  target = 2 * n - 1;
 }
 addEventListener('scroll', updateTarget, { passive: true });
 addEventListener('resize', layout);
@@ -440,13 +437,25 @@ const path = new THREE.CubicBezierCurve3(), T = new THREE.Vector3(), tan = new T
 const qGoal = new THREE.Quaternion();
 let last = 0, first = true;
 
+// one full lap around planet k, starting and ending at its hover stop, tilted so it swings behind the planet
+const _o2 = new THREE.Vector3();
+function orbitPos(k, o, out) {
+  const c = planets[k].group.position, v = rocketStops[k];
+  const dx = v.x - c.x, dz = v.z - c.z, th = o * Math.PI * 2, cs = Math.cos(th), sn = Math.sin(th);
+  const r = Math.hypot(dx, dz);
+  return out.set(c.x + dx * cs + dz * sn, v.y + Math.sin(th) * r * 0.3, c.z - dx * sn + dz * cs);
+}
+
 renderer.setAnimationLoop(time => {
   const dt = Math.min((time - last) / 1000, 0.05);
   last = time;
   current += (target - current) * (1 - Math.exp(-dt * 6));
 
   // which hop are we on; dwell at each planet, fly in between
-  const s = clamp(current * (N - 1), 0, N - 1);
+  const T = clamp(current, 0, 2 * N - 1);
+  const pk = Math.min(Math.floor(T / 2), N - 1), ph = T - 2 * pk;
+  const orbiting = ph < 1 && pk > 0; // Earth: the rocket waits on its launch pad instead
+  const s = pk + Math.max(0, ph - 1);
   const i = Math.min(Math.floor(s), N - 2);
   const e = smoothstep(s - i, 0.18, 0.82);
 
@@ -472,18 +481,24 @@ renderer.setAnimationLoop(time => {
   path.v1.copy(A).add(T);
   path.v2.copy(B).sub(T);
   path.v3.copy(B);
-  path.getPoint(e, rocket.position);
-  rocket.position.y += Math.sin(time / 700) * 0.5 * smoothstep(e, 0.02, 0.1); // gentle bob while flying
+  if (orbiting) {
+    orbitPos(pk, ph, rocket.position);
+    orbitPos(pk, ph + 0.002, _o2);
+    tan.copy(_o2).sub(rocket.position).normalize();
+  } else {
+    path.getPoint(e, rocket.position);
+    rocket.position.y += Math.sin(time / 700) * 0.5 * smoothstep(e, 0.02, 0.1); // gentle bob while flying
 
-  path.getTangent(e, tan);
-  tan.z *= i === 0 ? lerp(1, 0.25, smoothstep(e, 0, 0.2)) : 0.25; // show more profile than depth; exact pad normal at liftoff
-  tan.normalize();
+    path.getTangent(e, tan);
+    tan.z *= i === 0 ? lerp(1, 0.25, smoothstep(e, 0, 0.2)) : 0.25; // show more profile than depth; exact pad normal at liftoff
+    tan.normalize();
+  }
   qGoal.setFromUnitVectors(UP, tan);
   if (first) { rocket.quaternion.copy(qGoal); first = false; }
   else rocket.quaternion.slerp(qGoal, 1 - Math.exp(-dt * 7));
   body.rotation.y = time / 900 + e * Math.PI * 2;
 
-  let power = Math.sin(Math.PI * e);
+  let power = orbiting ? 0.35 : Math.sin(Math.PI * e);
   if (i === 0) power = Math.max(power, smoothstep(e, 0, 0.04) * (1 - smoothstep(e, 0.25, 0.6))); // full thrust at liftoff
   const flick = 1 + Math.sin(time / 35) * 0.08 + Math.sin(time / 53) * 0.06;
   flame.scale.set(1 + power * 0.1, (0.75 + power * 0.95) * flick, 1 + power * 0.1);
