@@ -99,7 +99,7 @@ a { color: var(--accent); text-underline-offset: 4px; }
   text-transform: uppercase;
   color: #fff;
 }
-.project-intro { margin-bottom: 14px !important; }
+.prose { text-align: justify; hyphens: auto; margin-bottom: 1.55em !important; }
 
 /* computer vision: skills and tools as chips */
 .tags { margin-top: 14px; }
