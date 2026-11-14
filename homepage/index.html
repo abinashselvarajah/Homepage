@@ -39,12 +39,15 @@
         <h2>Computervision</h2>
         <h3 class="project">Synthetic vs. Real</h3>
         <p class="project-intro">Can virtual images replace real ones when training industrial recognition systems? My thesis investigates how suitable synthetic data is.</p>
-        <ul class="steps">
-          <li><strong>Data</strong> Real image dataset of 3D-modelled Makeblock parts</li>
-          <li><strong>Generate</strong> Synthetic images in Unity with the Perception tool and several randomizers</li>
-          <li><strong>Train</strong> Neural networks on different mixes of real and synthetic images</li>
-          <li><strong>Compare</strong> Metrics show how much the training data matters</li>
-        </ul>
+        <p>I started from a real image dataset of 3D-modelled Makeblock parts and recreated it in Unity. With the Perception tool, I generated synthetic images using domain randomizers for colour, rotation, texture, background and sun angle, which adds the variety a purely virtual dataset lacks.</p>
+        <p>On this data I trained a CNN for image classification in Keras and an SSD MobileNet V2 model for object detection with TensorFlow. I first compared the randomized parameters one by one, then trained networks on different shares of real and synthetic images and evaluated them with accuracy and detection metrics.</p>
+        <p>The result: synthetic data is a good way to extend a real dataset, but only if the randomization is chosen with care.</p>
+        <div class="tags">
+          <p class="tags-label">Languages</p>
+          <ul class="chips"><li>Python</li><li>C#</li></ul>
+          <p class="tags-label">Tools</p>
+          <ul class="chips"><li>Unity</li><li>TensorFlow</li><li>Keras</li></ul>
+        </div>
         <p class="doc"><a class="doc-link" href="https://ruhr-uni-bochum.sciebo.de/s/fwgSCcPYEBosSjw" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation <span class="doc-lang">(German)</span></a></p>
         <div class="pair">
           <figure><img src="/src/assets/real-image.jpg" alt="Photo of a blue perforated metal part lying on a newspaper" loading="lazy"><figcaption>Real image</figcaption></figure>
