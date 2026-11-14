@@ -129,6 +129,13 @@ const painters = {
   },
 };
 
+const URANUS_RINGS = [
+  [0.228, 0.012, 0.40], [0.253, 0.012, 0.40], [0.283, 0.012, 0.40],
+  [0.417, 0.014, 0.48], [0.477, 0.014, 0.48], [0.557, 0.012, 0.40],
+  [0.598, 0.012, 0.40], [0.645, 0.012, 0.40], [0.762, 0.012, 0.30],
+  [0.835, 0.034, 0.75],
+];
+
 function ringTexture(kind) {
   const w = 512, c = document.createElement('canvas');
   c.width = w; c.height = 1;
@@ -143,8 +150,13 @@ function ringTexture(kind) {
       if (t < 0.28) a *= 0.45;
       col = mix([190, 164, 120], [244, 226, 186], fbm(t * 24, 5, 2, 3));
     } else {
-      a = (smoothstep(t, 0.18, 0.2) - smoothstep(t, 0.24, 0.26) + smoothstep(t, 0.68, 0.7) - smoothstep(t, 0.74, 0.76)) * 0.55;
-      col = [190, 230, 240];
+      // Uranus: narrow, dark rings (6, 5, 4, alpha, beta, eta, gamma, delta, lambda) and the wider, brighter epsilon ring.
+      // Positions follow the real radii (1.64 to 2.0 planet radii) within the ring range of 1.5 to 2.1.
+      a = 0;
+      for (const [centre, width, alpha] of URANUS_RINGS) {
+        a += (smoothstep(t, centre - width, centre - width / 2) - smoothstep(t, centre + width / 2, centre + width)) * alpha;
+      }
+      col = [128, 136, 142];
     }
     img.data.set([col[0], col[1], col[2], clamp(a, 0, 1) * 255], i * 4);
   }
