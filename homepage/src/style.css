@@ -89,3 +89,24 @@ a { color: var(--accent); text-underline-offset: 4px; }
 }
 .doc-link:hover { background: rgba(255, 138, 92, 0.2); transform: translateY(-2px); }
 .doc-lang { font-weight: 400; opacity: 0.7; }
+
+/* computer vision: project block */
+.project {
+  margin: 14px 0 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.project-intro { margin-bottom: 14px !important; }
+.steps { list-style: none; margin: 0 0 4px; padding: 0; font-size: clamp(15px, 1.7vw, 18px); }
+.steps li { padding: 8px 0; border-top: 1px solid rgba(255, 138, 92, 0.25); }
+.steps li:last-child { border-bottom: 1px solid rgba(255, 138, 92, 0.25); }
+.steps strong {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
