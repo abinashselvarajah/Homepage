@@ -132,3 +132,6 @@ main > section > .proj { max-width: 40em; margin-bottom: 2.6em; }
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
 }
 .videos figcaption { margin-top: 8px; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+
+/* same body text size inside project blocks as in the other sections */
+.proj > p:not(.kicker) { font-size: clamp(17px, 2vw, 21px); }
