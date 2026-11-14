@@ -363,6 +363,7 @@ function updateTrail(dt) {
 
 // Layout: planets alternate sides (opposite the text); rocket stops beside each planet
 const rocketStops = planets.map(() => new THREE.Vector3());
+const orbitR = planets.map(() => 0);
 const padNormal = new THREE.Vector3(-0.55, 0.72, 0.42).normalize();
 function layout() {
   camera.aspect = innerWidth / innerHeight;
@@ -388,7 +389,8 @@ function layout() {
     p.atm.material.uniforms.L.value.copy(p.key.position).sub(p.group.position).normalize();
 
     // the rocket hovers beside each planet
-    if (k > 0) rocketStops[k].set(x - side * (R * 1.25 + 5 * ps), y, -k * SPZ + R + 9);
+    orbitR[k] = R * 1.3 + 5 * ps;
+    if (k > 0) rocketStops[k].set(x, y, -k * SPZ + orbitR[k]); // front of the planet: the lap starts here
   });
 
   // Earth: the rocket stands on a launch pad on the upper-left of the planet, nose along the surface normal
@@ -437,14 +439,17 @@ const path = new THREE.CubicBezierCurve3(), T = new THREE.Vector3(), tan = new T
 const qGoal = new THREE.Quaternion();
 let last = 0, first = true;
 
-// one full lap around planet k, starting and ending at its hover stop, tilted so it swings behind the planet
-const _o2 = new THREE.Vector3();
-function orbitPos(k, o, out) {
-  const c = planets[k].group.position, v = rocketStops[k];
-  const dx = v.x - c.x, dz = v.z - c.z, th = o * Math.PI * 2, cs = Math.cos(th), sn = Math.sin(th);
-  const r = Math.hypot(dx, dz);
-  return out.set(c.x + dx * cs + dz * sn, v.y + Math.sin(th) * r * 0.3, c.z - dx * sn + dz * cs);
+// half a lap around planet k: from the front, round its outer side (away from the text), to the back,
+// where the rocket is heading towards the next planet
+const _o2 = new THREE.Vector3(), _hA = new THREE.Vector3(), _hB = new THREE.Vector3(), _hC = new THREE.Vector3();
+const sideOf = k => (k % 2 === 0 ? 1 : -1);
+function orbitPos(k, t, out) {
+  const c = planets[k].group.position, r = orbitR[k], ph = t * Math.PI;
+  return out.set(c.x + sideOf(k) * r * Math.sin(ph), c.y + 0.25 * r * Math.sin(ph), c.z + r * Math.cos(ph));
 }
+// exit point behind planet k and heading of the lap at its start / end
+function orbitExit(k, out) { return orbitPos(k, 1, out); }
+function orbitDir(k, t, out) { return orbitPos(k, t + 0.002, out).sub(orbitPos(k, t, _o2)).normalize(); }
 
 renderer.setAnimationLoop(time => {
   const dt = Math.min((time - last) / 1000, 0.05);
@@ -457,7 +462,9 @@ renderer.setAnimationLoop(time => {
   const orbiting = ph < 1 && pk > 0; // Earth: the rocket waits on its launch pad instead
   const s = pk + Math.max(0, ph - 1);
   const i = Math.min(Math.floor(s), N - 2);
-  const e = smoothstep(s - i, 0.18, 0.82);
+  const u = s - i;                       // 0..1 along the current flight
+  const e = smoothstep(u, 0, 1);         // eased version for the camera
+  const eR = i === 0 ? e : u;            // rocket: eased lift-off from Earth, afterwards no stop between lap and flight
 
   camera.position.set(Math.sin(time / 6000) * 1.5, Math.cos(time / 7000), CAMD - (i + e) * SPZ);
   camera.lookAt(0, 0, camera.position.z - 100);
@@ -473,24 +480,26 @@ renderer.setAnimationLoop(time => {
   });
   starLayers.forEach((m, k) => { m.opacity = 0.78 + Math.sin(time / (900 + k * 400) + k) * 0.22; });
 
-  // rocket path: cubic Bezier from stop i to stop i+1, leaving and arriving nose-up
-  const A = rocketStops[i], B = rocketStops[i + 1];
-  if (i === 0) T.copy(padNormal).multiplyScalar(34).setZ(T.z + (B.z - A.z) / 3 * 0.5);
-  else T.set(0, 26, (B.z - A.z) / 3);
-  path.v0.copy(A);
-  path.v1.copy(A).add(T);
-  path.v2.copy(B).sub(T);
-  path.v3.copy(B);
+  // rocket path: cubic Bezier from the end of one lap to the start of the next, with matching headings
+  if (!orbiting) {
+    const A = i === 0 ? rocketStops[0] : orbitExit(i, _hA), B = rocketStops[i + 1];
+    const L = Math.max(Math.abs(B.x - A.x) * 0.55, 14);
+    if (i === 0) T.copy(padNormal).multiplyScalar(34).setZ(T.z + (B.z - A.z) / 6);
+    else T.copy(orbitDir(i, 1, _hC)).multiplyScalar(L); // leave along the heading the lap ended with
+    path.v0.copy(A);
+    path.v1.copy(A).add(T);
+    path.v2.copy(B).addScaledVector(orbitDir(i + 1, 0, _hB), -L); // arrive along the heading the next lap starts with
+    path.v3.copy(B);
+  }
   if (orbiting) {
     orbitPos(pk, ph, rocket.position);
-    orbitPos(pk, ph + 0.002, _o2);
-    tan.copy(_o2).sub(rocket.position).normalize();
+    orbitDir(pk, ph, tan);
   } else {
-    path.getPoint(e, rocket.position);
-    rocket.position.y += Math.sin(time / 700) * 0.5 * smoothstep(e, 0.02, 0.1); // gentle bob while flying
+    path.getPoint(eR, rocket.position);
+    rocket.position.y += Math.sin(time / 700) * 0.5 * smoothstep(eR, 0.02, 0.1); // gentle bob while flying
 
-    path.getTangent(e, tan);
-    tan.z *= i === 0 ? lerp(1, 0.25, smoothstep(e, 0, 0.2)) : 0.25; // show more profile than depth; exact pad normal at liftoff
+    path.getTangent(eR, tan);
+    tan.z *= i === 0 ? lerp(1, 0.25, smoothstep(eR, 0, 0.2)) : 0.25; // show more profile than depth; exact pad normal at liftoff
     tan.normalize();
   }
   qGoal.setFromUnitVectors(UP, tan);
@@ -498,8 +507,8 @@ renderer.setAnimationLoop(time => {
   else rocket.quaternion.slerp(qGoal, 1 - Math.exp(-dt * 7));
   body.rotation.y = time / 900 + e * Math.PI * 2;
 
-  let power = orbiting ? 0.35 : Math.sin(Math.PI * e);
-  if (i === 0) power = Math.max(power, smoothstep(e, 0, 0.04) * (1 - smoothstep(e, 0.25, 0.6))); // full thrust at liftoff
+  let power = orbiting ? 0.35 : 0.35 + 0.65 * Math.sin(Math.PI * u);
+  if (i === 0 && !orbiting) power = Math.max(Math.sin(Math.PI * eR), smoothstep(eR, 0, 0.04) * (1 - smoothstep(eR, 0.25, 0.6))); // full thrust at liftoff
   const flick = 1 + Math.sin(time / 35) * 0.08 + Math.sin(time / 53) * 0.06;
   flame.scale.set(1 + power * 0.1, (0.75 + power * 0.95) * flick, 1 + power * 0.1);
   flameLight.intensity = 50 + power * 90;
