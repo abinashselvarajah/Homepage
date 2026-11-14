@@ -273,7 +273,7 @@ const starLayers = [[1700, 2.4], [750, 4], [260, 6.5]].map(([count, size]) => {
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
   const mat = new THREE.PointsMaterial({
-    size, sizeAttenuation: false, map: spriteTex, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    size, sizeAttenuation: false, fog: false, map: spriteTex, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });
   const pts = new THREE.Points(geo, mat);
   pts.frustumCulled = false;
