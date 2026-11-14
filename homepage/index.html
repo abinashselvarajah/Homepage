@@ -157,7 +157,7 @@
 
         <div class="proj">
           <h3 class="project">Spec Extraction by Distillation</h3>
-          <p class="prose project-intro">Large language models read specification pages of product manuals well, but they are expensive. Can a small model learn the same job from them?</p>
+          <p class="prose project-intro">Large language models read specification pages of product manuals well, but they are expensive in resources and money when many manuals have to be evaluated. Can a small model learn the same job from them?</p>
           <p class="prose">gpt-5.6-terra labels manual pages as JSON grouped by physical component, or as empty for pages without specifications. On these labels we fine-tune the small vision-language models Qwen3-VL 2B and 4B with LoRA, using 80 % specification pages and 20 % empty pages so that they also learn what to ignore. Held-out manuals test whether the students return valid JSON, recognise empty pages and find the right components and fields.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
