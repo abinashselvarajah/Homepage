@@ -147,10 +147,19 @@ function ringTexture(kind) {
 /* =====================================================================
    Planets
    ===================================================================== */
-const atmosphereMat = (color, power) => new THREE.ShaderMaterial({
-  uniforms: { c: { value: new THREE.Color(color) }, p: { value: power } },
-  vertexShader: 'varying vec3 vN; void main(){ vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-  fragmentShader: 'uniform vec3 c; uniform float p; varying vec3 vN; void main(){ float i = pow(max(0.0, 0.72 - dot(vN, vec3(0.0, 0.0, 1.0))), p); gl_FragColor = vec4(c * i * 1.7, i); }',
+// thin rim glow that only shows on the sunlit limb (uniform L = world-space direction to the key light)
+const atmosphereMat = (color, strength) => new THREE.ShaderMaterial({
+  uniforms: { c: { value: new THREE.Color(color) }, k: { value: strength }, L: { value: new THREE.Vector3(0, 1, 0) } },
+  vertexShader: `varying vec3 vN; varying vec3 vW;
+    void main(){ vN = normalize(normalMatrix * normal); vW = normalize(mat3(modelMatrix) * normal);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform vec3 c; uniform float k; uniform vec3 L; varying vec3 vN; varying vec3 vW;
+    void main(){
+      float rim = pow(max(0.0, 0.7 - dot(vN, vec3(0.0, 0.0, 1.0))), 2.5);
+      float lit = smoothstep(-0.15, 0.55, dot(normalize(vW), L));
+      float a = rim * lit * k;
+      gl_FragColor = vec4(c * a, a);
+    }`,
   side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
 });
 
@@ -161,20 +170,22 @@ function createPlanet(o) {
   group.add(tilt);
 
   const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(o.radius, 64, 48),
-    new THREE.MeshStandardMaterial({ map: makeTexture(512, 256, painters[o.paint]), roughness: o.rough ?? 0.9, metalness: 0 })
+    new THREE.SphereGeometry(o.radius, 96, 64),
+    new THREE.MeshStandardMaterial({ map: null, roughness: o.rough ?? 0.9, metalness: 0 })
   );
+  mesh.material.map = makeTexture(o.res ?? 512, (o.res ?? 512) / 2, painters[o.paint]);
+  if (o.bump) { mesh.material.bumpMap = mesh.material.map; mesh.material.bumpScale = o.bump; }
   tilt.add(mesh);
 
-  const atm = new THREE.Mesh(new THREE.SphereGeometry(o.radius * 1.16, 48, 32), atmosphereMat(o.atmosphere, o.atmPower ?? 4));
+  const atm = new THREE.Mesh(new THREE.SphereGeometry(o.radius * 1.035, 64, 48), atmosphereMat(o.atmosphere, o.atmK));
   group.add(atm);
 
-  const planet = { group, mesh, radius: o.radius, accent: o.accent, spin: o.spin ?? 0.00006 };
+  const planet = { group, mesh, atm, radius: o.radius, accent: o.accent, spin: o.spin ?? 0.00006 };
 
   if (o.clouds) {
     planet.clouds = new THREE.Mesh(
-      new THREE.SphereGeometry(o.radius * 1.012, 64, 48),
-      new THREE.MeshStandardMaterial({ map: makeTexture(512, 256, painters.clouds), transparent: true, roughness: 1, depthWrite: false })
+      new THREE.SphereGeometry(o.radius * 1.012, 96, 64),
+      new THREE.MeshStandardMaterial({ map: makeTexture(1024, 512, painters.clouds), transparent: true, roughness: 1, depthWrite: false })
     );
     tilt.add(planet.clouds);
   }
@@ -205,24 +216,24 @@ function createPlanet(o) {
 
 // outward through the solar system; text sections line up with this list
 const planets = [
-  createPlanet({ radius: 12, paint: 'earth', clouds: true, moon: true, atmosphere: 0x4f9bff, atmPower: 3.2, tilt: [0.25, 0.4], accent: 0x5aa9ff, spin: 0.00008, rough: 0.7 }),
-  createPlanet({ radius: 7, paint: 'mars', atmosphere: 0xff7a4a, atmPower: 6, tilt: [0.3, -0.3], accent: 0xff8a5c, spin: 0.00007 }),
-  createPlanet({ radius: 18, paint: 'jupiter', atmosphere: 0xf2b27a, atmPower: 5, tilt: [0.1, 0.1], accent: 0xf2c48d, spin: 0.00012 }),
-  createPlanet({ radius: 12, paint: 'saturn', atmosphere: 0xe9cf8a, atmPower: 5, tilt: [0.5, -0.35], accent: 0xe9d28f, spin: 0.0001, rings: { kind: 'saturn', range: [1.35, 2.35] } }),
-  createPlanet({ radius: 10, paint: 'uranus', atmosphere: 0x7fe3e8, atmPower: 3.6, tilt: [0.3, 1.35], accent: 0x7fe3e8, spin: 0.00008, rings: { kind: 'uranus', range: [1.5, 2.1] } }),
-  createPlanet({ radius: 10, paint: 'neptune', atmosphere: 0x5577ff, atmPower: 3.4, tilt: [0.2, 0.2], accent: 0x6f8cff, spin: 0.00009 }),
+  createPlanet({ radius: 12, paint: 'earth', res: 1024, bump: 1.2, clouds: true, moon: true, atmosphere: 0x5aa8ff, atmK: 1.1, tilt: [0.25, 0.4], accent: 0x5aa9ff, spin: 0.00008, rough: 0.6 }),
+  createPlanet({ radius: 7, paint: 'mars', res: 1024, bump: 2.0, atmosphere: 0xff8a5a, atmK: 0.35, tilt: [0.3, -0.3], accent: 0xff8a5c, spin: 0.00007 }),
+  createPlanet({ radius: 18, paint: 'jupiter', res: 1024, atmosphere: 0xf2b27a, atmK: 0.18, tilt: [0.1, 0.1], accent: 0xf2c48d, spin: 0.00012 }),
+  createPlanet({ radius: 12, paint: 'saturn', res: 1024, atmosphere: 0xe9cf8a, atmK: 0.18, tilt: [0.5, -0.35], accent: 0xe9d28f, spin: 0.0001, rings: { kind: 'saturn', range: [1.35, 2.35] } }),
+  createPlanet({ radius: 10, paint: 'uranus', atmosphere: 0x9eeef2, atmK: 0.5, tilt: [0.3, 1.35], accent: 0x7fe3e8, spin: 0.00008, rings: { kind: 'uranus', range: [1.5, 2.1] } }),
+  createPlanet({ radius: 10, paint: 'neptune', atmosphere: 0x6f8cff, atmK: 0.55, tilt: [0.2, 0.2], accent: 0x6f8cff, spin: 0.00009 }),
 ];
 const N = planets.length;
 
 /* =====================================================================
    Lighting: warm key + cool rim point light per planet, soft ambient fill
    ===================================================================== */
-scene.add(new THREE.AmbientLight(0x2c3270, 1.1));
+scene.add(new THREE.AmbientLight(0x2c3270, 0.6));
 const rimColors = [0x4aa8ff, 0xff5c8a, 0x9a6bff, 0x38d6c4, 0xff7ad9, 0x5a6bff];
 const KEY_D = 62, RIM_D = 70;
 planets.forEach((p, k) => {
-  p.key = new THREE.PointLight(0xffe4bd, 3.6 * KEY_D * KEY_D, 190, 2);
-  p.rim = new THREE.PointLight(rimColors[k], 2.6 * RIM_D * RIM_D, 190, 2);
+  p.key = new THREE.PointLight(0xffe4bd, 4.4 * KEY_D * KEY_D, 190, 2);
+  p.rim = new THREE.PointLight(rimColors[k], 1.5 * RIM_D * RIM_D, 190, 2);
   scene.add(p.key, p.rim);
 });
 
@@ -315,8 +326,9 @@ const flameLight = new THREE.PointLight(0xff8a30, 60, 40, 2);
 flameLight.position.y = -5.5;
 body.add(flameLight);
 
-const ROCKET_SCALE = 1.1;
-rocket.scale.setScalar(ROCKET_SCALE);
+const ROCKET_SCALE = 0.85;
+let rocketScale = ROCKET_SCALE;
+rocket.scale.setScalar(rocketScale);
 scene.add(rocket);
 
 /* exhaust trail */
@@ -355,6 +367,7 @@ function updateTrail(dt) {
    Layout: planets on alternating sides (opposite the text), rocket waypoints
    ===================================================================== */
 const rocketStops = planets.map(() => new THREE.Vector3());
+const padNormal = new THREE.Vector3();
 function layout() {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
@@ -378,10 +391,18 @@ function layout() {
     p.key.position.set(x - side * 40 * ps, y + 34, -k * SPZ + 44);
     p.rim.position.set(x + side * 52 * ps, y + 14, -k * SPZ - 42);
 
-    // the rocket hovers beside its planet (Earth: lifting off the limb)
-    const off = k === 0 ? 0.88 : 1.25, extra = k === 0 ? 0 : 5 * ps;
-    rocketStops[k].set(x - side * (R * off + extra), y + (k === 0 ? R * 0.3 : 0), -k * SPZ + R + 9);
+    // atmosphere only glows on the side facing the key light
+    p.atm.material.uniforms.L.value.copy(p.key.position).sub(p.group.position).normalize();
+
+    // the rocket hovers beside its planet
+    if (k > 0) rocketStops[k].set(x - side * (R * 1.25 + 5 * ps), y, -k * SPZ + R + 9);
   });
+
+  // Earth: the rocket stands on a launch pad on the upper-left of the planet, nose along the surface normal
+  rocketScale = ROCKET_SCALE * clamp(ps, 0.6, 1);
+  rocket.scale.setScalar(rocketScale);
+  padNormal.set(-0.55, 0.72, 0.42).normalize();
+  rocketStops[0].copy(planets[0].group.position).addScaledVector(padNormal, planets[0].R + 4.4 * rocketScale + 0.15);
   updateTarget();
 }
 
@@ -456,15 +477,17 @@ renderer.setAnimationLoop(time => {
 
   // rocket path: cubic Bezier from stop i to stop i+1, leaving and arriving nose-up
   const A = rocketStops[i], B = rocketStops[i + 1];
-  T.set(0, 26, (B.z - A.z) / 3);
+  if (i === 0) T.copy(padNormal).multiplyScalar(34).setZ(T.z + (B.z - A.z) / 3 * 0.5);
+  else T.set(0, 26, (B.z - A.z) / 3);
   P1.copy(A).add(T);
   P2.copy(B).sub(T);
   bezier(A, P1, P2, B, e, pos);
-  pos.y += Math.sin(time / 700) * 0.5;
+  if (!(i === 0 && e < 0.02)) pos.y += Math.sin(time / 700) * 0.5 * smoothstep(e, 0.02, 0.1);
   rocket.position.copy(pos);
+  rocket.scale.setScalar(rocketScale);
 
   bezierTangent(A, P1, P2, B, e, tan);
-  tan.z *= 0.25; // show more of the rocket's profile than the depth direction
+  tan.z *= i === 0 ? lerp(1, 0.25, smoothstep(e, 0, 0.2)) : 0.25; // show more profile than depth; exact pad normal at liftoff
   tan.normalize();
   qGoal.setFromUnitVectors(UP, tan);
   if (first) { rocket.quaternion.copy(qGoal); first = false; }
@@ -472,7 +495,8 @@ renderer.setAnimationLoop(time => {
   body.rotation.y = time / 900 + e * Math.PI * 2;
 
   // flame power follows how fast the hop is progressing
-  const power = Math.sin(Math.PI * e);
+  let power = Math.sin(Math.PI * e);
+  if (i === 0) power = Math.max(power, smoothstep(e, 0, 0.04) * (1 - smoothstep(e, 0.25, 0.6))); // full thrust at liftoff
   const flick = 1 + Math.sin(time / 35) * 0.08 + Math.sin(time / 53) * 0.06;
   flame.scale.set(1 + power * 0.1, (0.75 + power * 0.95) * flick, 1 + power * 0.1);
   flameLight.intensity = 50 + power * 90;
