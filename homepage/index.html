@@ -31,7 +31,7 @@
           <p class="lead"><em>The only way of discovering the limits of the possible is to venture a little way past them into the impossible.</em> <cite>— Arthur C. Clarke</cite></p>
         </header>
         <h2>About Me</h2>
-        <p class="prose">I am a software engineer with a profound passion for anything related to artificial intelligence, stemming from my fascination with science fiction.</p>
+        <p class="prose">Software engineer with a passion for artificial intelligence, sparked by science fiction.</p>
         <p class="tags-label">Education</p>
         <ul class="facts">
           <li><strong>M.Sc. Computer Science, AI track</strong> Ruhr-Universität Bochum, October 2023 – May 2026, grade 1.2</li>
@@ -48,10 +48,9 @@
         <p class="kicker"></p>
         <h2>Computervision</h2>
         <h3 class="project">Synthetic vs. Real</h3>
-        <p class="prose project-intro">Can virtual images replace real ones when training industrial recognition systems? My project investigates how suitable synthetic data is.</p>
-        <p class="prose">I started from a real image dataset of 3D-modelled Makeblock parts and recreated it in Unity. With the Perception tool, I generated synthetic images using domain randomizers for colour, rotation, texture, background and sun angle, which adds the variety a purely virtual dataset lacks.</p>
-        <p class="prose">On this data I trained a CNN for image classification in Keras and an SSD MobileNet V2 model for object detection with TensorFlow. I first compared the randomized parameters one by one, then trained networks on different shares of real and synthetic images and evaluated them with accuracy and detection metrics.</p>
-        <p class="prose">The result: synthetic data is a good way to extend a real dataset, but only if the randomization is chosen with care.</p>
+        <p class="prose project-intro">Real training images for industrial recognition systems are scarce, so we asked how far synthetic images can take over.</p>
+        <p class="prose">We recreated a real dataset of 3D-modelled Makeblock parts in Unity and generated synthetic variants with the Perception tool, varying colour, rotation, texture, background and lighting to cover what the real photos lack. Classification and detection networks were then trained on different mixes of real and synthetic images and compared.</p>
+        <p class="prose">Synthetic data extends real data well, but only when the randomization is chosen carefully.</p>
         <div class="tags">
           <p class="tags-label">Languages</p>
           <ul class="chips"><li>Python</li><li>C#</li></ul>
@@ -71,9 +70,9 @@
 
         <div class="proj">
           <h3 class="project">Autonomous Vehicles and Artificial Intelligence 2023</h3>
-          <p class="prose project-intro">Can a small robot drive a racetrack on its own, using only a camera and LiDAR? In the course Autonomous Vehicles and AI, our group built the full software stack for a TurtleBot3.</p>
-          <p class="prose">We derived requirements with the WISE Drive framework and implemented the system as ROS 2 nodes. A camera node feeds a YOLOv5 model, trained with Roboflow on Google Colab, that detects the coloured cones. LiDAR data is fused with the detections to place each cone in space, Cartographer SLAM corrects the drifting odometry, and an occupancy map collects the cone positions. A movement controller then steers towards the next target point between the nearest blue and yellow cone.</p>
-          <p class="prose">The TurtleBot drives simple and round racetracks autonomously. The main limits were odometry drift and the processing delay of the on-board hardware.</p>
+          <p class="prose project-intro">Driving a racetrack with nothing but a camera and LiDAR: our TurtleBot3 had to find its own way between coloured cones.</p>
+          <p class="prose">The robot detects the cones with a YOLOv5 model and places them in space by fusing the detections with LiDAR distances. Because its odometry drifted, Cartographer SLAM corrected its position, and the cones were collected in an occupancy map. A controller then steers towards the midpoint between the nearest blue and yellow cone.</p>
+          <p class="prose">The TurtleBot drives simple and round tracks; odometry drift and slow on-board processing remained the limits.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -86,9 +85,9 @@
 
         <div class="proj">
           <h3 class="project">Autonomous Vehicles and Artificial Intelligence 2025</h3>
-          <p class="prose project-intro">Same challenge, faster hardware: can the approach also drive an F1TENTH racecar through a cone track? In the follow-up course, we ported our stack to the racecar.</p>
-          <p class="prose">A RealSense camera feeds a YOLOv11 Nano model for cone detection. We trained it on real images and compared different shares of synthetic images, from 0 to 100 %, as well as many negative samples. The detections are fused with LiDAR data, clustered with DBSCAN and collected in an occupancy map. The controller drives to the midpoint between the nearest blue and yellow cone ahead; if only one colour is visible, it predicts the missing cone or explores until both are in view.</p>
-          <p class="prose">In sufficient conditions, the racecar navigates the track using only camera and LiDAR. Most of the driving code had to be rewritten, because the racecar steers fundamentally differently from the TurtleBot.</p>
+          <p class="prose project-intro">Same task, faster hardware: we ported the approach to an F1TENTH racecar.</p>
+          <p class="prose">A RealSense camera and a YOLOv11 model detect the cones, trained on real images and on different shares of synthetic ones. The detections are fused with LiDAR data, clustered with DBSCAN and mapped, and the controller aims for the midpoint between the nearest blue and yellow cone, predicting a missing cone when only one colour is visible.</p>
+          <p class="prose">The racecar navigates the track with camera and LiDAR only. Its steering works fundamentally differently, so most of the driving code had to be rewritten.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>C#</li></ul>
@@ -101,9 +100,9 @@
 
         <div class="proj">
           <h3 class="project">Human-Centered Robotics</h3>
-          <p class="prose project-intro">How can a robot help a worker with cerebral palsy to press small rubber and metal parts together in a sheltered workshop?</p>
-          <p class="prose">Based on a visit to the workshop, we defined a persona and requirements and developed the system in Scrum sprints. The dual-arm ABB YuMi is controlled from Python, with motion targets taught by hand and stored in a JSON file. OpenCV locates each part and its orientation from a 4K webcam image using edge detection and principal component analysis, and a 3D-printed holder keeps the metal part stable. The worker controls the robot by voice: the hot word “Hey YuMi” is detected with Picovoice Porcupine, speech is processed with Google Speech-to-Text and the OpenAI API provides small talk, while an emergency stop secures every movement.</p>
-          <p class="prose">The system meets all requirements we set. What remains is analysing occasional robot errors, such as a sudden loss of calibration.</p>
+          <p class="prose project-intro">A worker with cerebral palsy presses small rubber and metal parts in a sheltered workshop; placing the metal part and operating the lever are the hardest steps. We built a robot assistant for them.</p>
+          <p class="prose">After a workshop visit we defined a persona and requirements and worked in Scrum sprints. The ABB YuMi is programmed in Python with hand-taught motion targets. To pick up loose parts, OpenCV finds each part and its orientation in a webcam image, and a 3D-printed holder keeps the metal part stable. The worker controls the robot by voice, with the hot word “Hey YuMi” and the OpenAI API for small talk, while an emergency stop secures every movement.</p>
+          <p class="prose">The system meets all requirements; occasional robot errors remain to be analysed.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>RAPID</li></ul>
@@ -120,8 +119,8 @@
 
         <div class="proj">
           <h3 class="project">Membership Inference Attacks</h3>
-          <p class="prose project-intro">Can we tell whether a text was part of a language model’s training data? This matters for copyright violations and private data leakage.</p>
-          <p class="prose">Existing attacks are often evaluated on data with a clear distribution shift, so I aggregate many attacks to find the most reliable signals. I extended an existing multi-scale framework from 10 to 644 features by adding reference-model-based attacks, and replaced its linear aggregator with Logistic Regression, an MLP, XGBoost, Random Forest and an SVC. The attack is evaluated on Pythia-2.8B and Pythia-6.9B over eight subsets of The Pile, and on models protected with the DuoLearn defense.</p>
+          <p class="prose project-intro">Was a given text part of a language model’s training data? Membership inference attacks answer this, which matters for copyright and data leakage, but a single attack is unreliable when the data distribution varies.</p>
+          <p class="prose">I therefore combine many attack signals instead of trusting one: I extended an existing framework from 10 to 644 features by adding reference-model-based attacks, and replaced its linear combiner with stronger classifiers such as XGBoost and an MLP. The attack is tested on Pythia-2.8B and 6.9B across eight subsets of The Pile, and against a model protected by the DuoLearn defense.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -133,8 +132,8 @@
 
         <div class="proj">
           <h3 class="project">LLMs for Repurposing</h3>
-          <p class="prose project-intro">Can large language models find ways to repurpose used products in a circular economy? This study evaluates GPT-5, Claude Sonnet 4.5 and Gemini 2.5 Pro on documented cases from the literature, as a co-author of the DESIGN 2026 paper.</p>
-          <p class="prose">Based on a systematic literature review, a validated dataset of 72 repurposing cases was built. Structured zero-shot prompts ask each model for ten repurposing scenarios and the properties needed to realise them. I was involved in setting up the experiments with the different models, which were run through their official APIs with ten runs per query, 3,120 runs in total. Outputs were compared to the dataset semantically with LLMs, followed by manual verification.</p>
+          <p class="prose project-intro">Repurposing keeps used products in use, but finding a new purpose is hard. Can LLMs help? As a co-author, I contributed to a systematic evaluation of GPT-5, Claude Sonnet 4.5 and Gemini 2.5 Pro (DESIGN 2026).</p>
+          <p class="prose">From a literature review we built a validated dataset of 72 documented repurposing cases. Each model received the same zero-shot prompts asking for ten repurposing scenarios and the properties needed to realise them, and I helped set up these experiments (3,120 runs). The answers were matched against the documented cases and checked manually.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -146,8 +145,8 @@
 
         <div class="proj">
           <h3 class="project">Spec Extraction by Distillation</h3>
-          <p class="prose project-intro">Can a small vision-language model take over a job that a large model does well but expensively: reading the technical specifications of physical components from pages of product manuals?</p>
-          <p class="prose">A large GPT model (gpt-5.6-terra) labels the manual pages through the OpenAI Batch API. For each page it returns the specifications as JSON grouped by component, such as motor, display or power supply, or an empty object for pages without any. The labels are balanced to 80 % specification pages and 20 % empty pages and used to fine-tune Qwen3-VL-2B-Instruct and Qwen3-VL-4B-Instruct with LoRA. Whole manuals are held out for validation, and the models are scored on valid JSON, on recognising empty pages and on the F1 of the extracted components and fields.</p>
+          <p class="prose project-intro">Large models read specification pages of product manuals well, but they are expensive. Can a small model learn the same job from them?</p>
+          <p class="prose">gpt-5.6-terra labels manual pages as JSON grouped by physical component, or as empty for pages without specifications. On these labels we fine-tune the small vision-language models Qwen3-VL 2B and 4B with LoRA, using 80 % specification pages and 20 % empty pages so that they also learn what to ignore. Held-out manuals test whether the students return valid JSON, recognise empty pages and find the right components and fields.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -159,8 +158,8 @@
 
         <div class="proj">
           <h3 class="project">Blue Team vs. Red Team</h3>
-          <p class="prose project-intro">How well does differential privacy protect a text classifier against membership inference? In the course Privacy-Preserving NLP, we played both sides.</p>
-          <p class="prose">As the defender, we trained a DistilBERT sentiment classifier on IMDB movie reviews with DP-SGD from Opacus at different privacy budgets ε. As the attacker, we used the robust membership inference attack (RMIA) and the Likelihood Ratio Attack (LiRA) on balanced sets of member and non-member samples, and compared attack AUC with accuracy and F1.</p>
+          <p class="prose project-intro">Differential privacy is meant to keep training data private. How well does it hold up against membership inference?</p>
+          <p class="prose">We played both sides. As defender, we trained a DistilBERT sentiment classifier on IMDB reviews with DP-SGD at different privacy budgets. As attacker, we used the RMIA and LiRA attacks against it and compared how attack success, accuracy and F1 change with the budget.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -177,8 +176,8 @@
 
         <div class="proj">
           <h3 class="project">Exploration vs. Exploitation</h3>
-          <p class="prose project-intro">How much should an agent explore, and how much should it exploit what it already knows? We compared four exploration strategies on the task of solving mazes.</p>
-          <p class="prose">We built a standardized framework on Stable Baselines 3 and trained a DQN agent with constant ε-greedy, annealed ε-greedy, Count Based exploration and Upper Confidence Bound (UCB). The environment is our own Gymnasium maze that generates random labyrinths from a seed: the agent starts in one corner and must reach the goal in the opposite corner. The goal gives a reward of 100, every step costs 1. We trained on 10×10 and 20×20 mazes with several seeds, once with dense rewards along the shortest path and once with sparse rewards, and tracked all runs in Weights &amp; Biases.</p>
+          <p class="prose project-intro">A reinforcement learning agent must balance exploring new options with exploiting what it knows. Which exploration strategy works best in mazes?</p>
+          <p class="prose">We compared constant and annealed ε-greedy, Count Based exploration and UCB on a DQN agent. The test bed is our own Gymnasium maze generator with 10×10 and 20×20 mazes, several seeds, and dense versus sparse rewards, with all runs tracked in Weights &amp; Biases.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -195,9 +194,8 @@
 
         <div class="proj">
           <h3 class="project">MaLeNa</h3>
-          <p class="prose project-intro">Which phones share the same display, battery or chipset, and so which parts could get a second life? In the MaLeNa project, which looks at re-using parts of end-of-life products, I built the data basis for this question: a graph database of phone specifications.</p>
-          <p class="prose">A scraper reads the datasheet pages of phonedb.net, following its robots.txt and waiting between requests, and splits each page into sections such as Display, Power Supply or Chipset. These become a Neo4j graph of products, components and properties, where values and units are shared nodes. A final merge step fingerprints every component with APOC and collapses identical ones into a single node that several phones point to.</p>
-          <p class="prose">The result is a graph in which shared parts are one hop apart, so a single Cypher query answers which phones have the same display or battery.</p>
+          <p class="prose project-intro">Re-using parts of end-of-life products starts with knowing which devices share the same parts. In MaLeNa, I built the data basis: a graph database of phone specifications.</p>
+          <p class="prose">A scraper reads the phonedb.net datasheets and stores each phone as a Neo4j graph of components and their properties. A final merge step collapses identical components into one shared node, so a single Cypher query shows which phones share a display or battery.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>Cypher</li></ul>
