@@ -27,6 +27,7 @@ main > section {
 main > section:nth-child(odd)  { align-items: flex-start; text-align: left; }
 main > section:nth-child(even) { align-items: flex-end;   text-align: right; }
 main > section > * { max-width: 30em; }
+main > section > .pair { max-width: 40em; }
 
 .kicker {
   margin: 0 0 10px;
@@ -53,3 +54,20 @@ a { color: var(--accent); text-underline-offset: 4px; }
   .links { justify-content: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) { .reveal { transition: none; } }
+
+.lead cite { display: block; margin-top: 6px; font-size: 0.9rem; font-style: normal; color: var(--accent); }
+
+.pair { display: flex; gap: 16px; max-width: 40em; }
+.pair figure { margin: 0; min-width: 0; }
+/* grow in proportion to each image's aspect ratio so both end up the same height */
+.pair figure:nth-child(1) { flex: 1.39 1 0; }
+.pair figure:nth-child(2) { flex: 1.9 1 0; }
+.pair img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--accent);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+.pair figcaption { margin-top: 8px; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
