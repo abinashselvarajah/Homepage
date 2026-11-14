@@ -122,7 +122,6 @@
           <h3 class="project">Membership Inference Attacks</h3>
           <p class="prose project-intro">Can we tell whether a text was part of a language model’s training data? This matters for copyright violations and private data leakage.</p>
           <p class="prose">Existing attacks are often evaluated on data with a clear distribution shift, so I aggregate many attacks to find the most reliable signals. I extended an existing multi-scale framework from 10 to 644 features by adding reference-model-based attacks, and replaced its linear aggregator with Logistic Regression, an MLP, XGBoost, Random Forest and an SVC. The attack is evaluated on Pythia-2.8B and Pythia-6.9B over eight subsets of The Pile, and on models protected with the DuoLearn defense.</p>
-          <p class="prose">The average AUROC rises from 0.535 to 0.845 on Pythia-2.8B and reaches about 0.99 on six of eight subsets with Pythia-6.9B. Most of the gain comes from the reference-model-based attacks, and token-level defenses are not enough once signals are aggregated over many samples.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -136,7 +135,6 @@
           <h3 class="project">LLMs for Repurposing</h3>
           <p class="prose project-intro">Can large language models find ways to repurpose used products in a circular economy? This study evaluates GPT-5, Claude Sonnet 4.5 and Gemini 2.5 Pro on documented cases from the literature, as a co-author of the DESIGN 2026 paper.</p>
           <p class="prose">Based on a systematic literature review, a validated dataset of 72 repurposing cases was built. Structured zero-shot prompts ask each model for ten repurposing scenarios and the properties needed to realise them. I was involved in setting up the experiments with the different models, which were run through their official APIs with ten runs per query, 3,120 runs in total. Outputs were compared to the dataset semantically with LLMs, followed by manual verification.</p>
-          <p class="prose">The models identify 78–84 % of the documented scenarios, but only 42–46 % of the relevant properties, and none found all properties of a case. Performance on complex products drops from about 90 % to 60 %.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -150,7 +148,6 @@
           <h3 class="project">Blue Team vs. Red Team</h3>
           <p class="prose project-intro">How well does differential privacy protect a text classifier against membership inference? In the course Privacy-Preserving NLP, we played both sides.</p>
           <p class="prose">As the defender, we trained a DistilBERT sentiment classifier on IMDB movie reviews with DP-SGD from Opacus at different privacy budgets ε. As the attacker, we used the robust membership inference attack (RMIA) and the Likelihood Ratio Attack (LiRA) on balanced sets of member and non-member samples, and compared attack AUC with accuracy and F1.</p>
-          <p class="prose">Both attacks get weaker as ε decreases, but accuracy and F1 drop as well. Choosing the privacy budget is a trade-off between privacy and utility.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -169,7 +166,6 @@
           <h3 class="project">Exploration vs. Exploitation</h3>
           <p class="prose project-intro">How much should an agent explore, and how much should it exploit what it already knows? We compared four exploration strategies on the task of solving mazes.</p>
           <p class="prose">We built a standardized framework on Stable Baselines 3 and trained a DQN agent with constant ε-greedy, annealed ε-greedy, Count Based exploration and Upper Confidence Bound (UCB). The environment is our own Gymnasium maze that generates random labyrinths from a seed: the agent starts in one corner and must reach the goal in the opposite corner. The goal gives a reward of 100, every step costs 1. We trained on 10×10 and 20×20 mazes with several seeds, once with dense rewards along the shortest path and once with sparse rewards, and tracked all runs in Weights &amp; Biases.</p>
-          <p class="prose">Annealed ε-greedy is more stable in small mazes, while constant ε-greedy overtakes it as the state space grows. With sparse rewards, the directed strategies (UCB, Count Based) beat the ε-greedy variants, but they suffer from catastrophic interference during long training.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
