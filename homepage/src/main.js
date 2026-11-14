@@ -6,7 +6,7 @@ const { clamp, lerp, smoothstep, degToRad } = THREE.MathUtils;
 const canvas = document.querySelector('#bg');
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x05060f, 0.0032);
-const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1200);
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1500);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setClearColor(0x000000, 0);
@@ -254,13 +254,17 @@ const spriteTex = (() => {
 })();
 
 const SPZ = 80, CAMD = 55;
-const starLayers = [[1100, 1.1], [500, 1.9], [160, 3.2]].map(([count, size]) => {
+// The stars are a distant backdrop: far beyond the last planet, constant pixel size, and the whole
+// field travels with the camera, so none of them can ever drift close and pop into the foreground.
+const starField = new THREE.Group();
+scene.add(starField);
+const starLayers = [[1700, 2.4], [750, 4], [260, 6.5]].map(([count, size]) => {
   const pos = new Float32Array(count * 3), col = new Float32Array(count * 3), color = new THREE.Color();
   for (let i = 0; i < count; i++) {
     pos.set([
-      THREE.MathUtils.randFloatSpread(520),
-      THREE.MathUtils.randFloatSpread(360),
-      THREE.MathUtils.randFloat(-SPZ * N - 250, 120),
+      THREE.MathUtils.randFloatSpread(4600),
+      THREE.MathUtils.randFloatSpread(1700),
+      THREE.MathUtils.randFloat(-1150, -900),
     ], i * 3);
     color.setHSL(Math.random(), THREE.MathUtils.randFloat(0.45, 1), THREE.MathUtils.randFloat(0.68, 0.9));
     col.set([color.r, color.g, color.b], i * 3);
@@ -269,11 +273,11 @@ const starLayers = [[1100, 1.1], [500, 1.9], [160, 3.2]].map(([count, size]) => 
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
   const mat = new THREE.PointsMaterial({
-    size, map: spriteTex, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    size, sizeAttenuation: false, map: spriteTex, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });
   const pts = new THREE.Points(geo, mat);
   pts.frustumCulled = false;
-  scene.add(pts);
+  starField.add(pts);
   return mat;
 });
 
@@ -468,6 +472,7 @@ renderer.setAnimationLoop(time => {
 
   camera.position.set(Math.sin(time / 6000) * 1.5, Math.cos(time / 7000), CAMD - (i + e) * SPZ);
   camera.lookAt(0, 0, camera.position.z - 100);
+  starField.position.z = camera.position.z * 0.97; // almost no parallax: a far backdrop
 
   planets.forEach(p => {
     p.mesh.rotation.y = time * p.spin;
