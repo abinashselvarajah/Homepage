@@ -393,17 +393,37 @@ function layout() {
   const rocketScale = 0.85 * clamp(ps, 0.6, 1);
   rocket.scale.setScalar(rocketScale);
   rocketStops[0].copy(planets[0].group.position).addScaledVector(padNormal, planets[0].radius * ps + 4.4 * rocketScale + 0.15);
+  measure();
   updateTarget();
 }
 
-// Scroll
-let target = 0, current = 0;
-function updateTarget() {
+// Scroll: the planets follow the text sections, so a tall section keeps its planet in view
+let target = 0, current = 0, marks = [];
+function measure() {
   const max = document.documentElement.scrollHeight - innerHeight;
-  target = max > 0 ? scrollY / max : 0;
+  marks = [...document.querySelectorAll('main > section')].map(el => {
+    const top = el.offsetTop, h = el.offsetHeight;
+    // tall sections dwell from top-aligned to bottom-aligned, short ones when centred
+    return h > innerHeight ? { a: top, b: top + h - innerHeight } : { a: top + h / 2 - innerHeight / 2, b: top + h / 2 - innerHeight / 2 };
+  });
+  if (marks.length) { marks[0].a = 0; marks[marks.length - 1].b = Math.max(max, marks[marks.length - 1].a); }
+}
+function updateTarget() {
+  const y = scrollY, n = Math.min(marks.length, N);
+  target = 1;
+  if (n < 2) { target = 0; return; }
+  for (let k = 0; k < n - 1; k++) {
+    if (y < marks[k + 1].a) {
+      target = (k + clamp((y - marks[k].b) / Math.max(1, marks[k + 1].a - marks[k].b), 0, 1)) / (N - 1);
+      return;
+    }
+  }
+  target = (n - 1) / (N - 1);
 }
 addEventListener('scroll', updateTarget, { passive: true });
 addEventListener('resize', layout);
+// lazy images and videos change section heights after load
+new ResizeObserver(() => { measure(); updateTarget(); }).observe(document.querySelector('main'));
 
 const io = new IntersectionObserver(
   entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')),
