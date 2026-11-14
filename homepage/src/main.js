@@ -96,24 +96,13 @@ const painters = {
     c = mix(c, [64, 28, 20], smoothstep(fbm(x * 2 + 5, y * 2, z * 2, 4), 0.55, 0.72) * 0.8);
     return mix(c, [244, 240, 236], smoothstep(Math.abs(y), 0.9, 0.95));
   },
-  venus(x, y, z) {
-    const w = fbm(x * 2, y * 3, z * 2, 4);
-    const t = (Math.sin(x * 3 + y * 5 + w * 4) + 1) / 2;
-    const c = mix([236, 196, 150], [206, 150, 112], t);
-    return mix(c, [248, 228, 196], smoothstep(fbm(x * 4, y * 4, z * 4, 3), 0.5, 0.75) * 0.6);
-  },
-  verdant(x, y, z) {
-    const w = fbm(x * 2 + 7, y * 4, z * 2, 4);
-    const t = (Math.sin((y + w * 0.3) * 14) + 1) / 2;
-    const c = mix([30, 120, 112], [120, 214, 166], t);
-    return mix(c, [214, 244, 226], smoothstep(fbm(x * 5, y * 5, z * 5, 3), 0.55, 0.8) * 0.5);
-  },
-  amethyst(x, y, z) {
-    const w = fbm(x * 3 + 2, y * 5, z * 3, 4);
-    const t = (Math.sin((y + w * 0.25) * 18) + 1) / 2;
-    let c = mix([86, 56, 170], [190, 160, 250], t);
-    const d = Math.hypot(x - 0.6, (y + 0.2) * 1.5, z - 0.7);
-    return mix(c, [236, 214, 255], clamp(1 - d / 0.25, 0, 1) * 0.7);
+  pluto(x, y, z) {
+    const n = fbm(x * 4, y * 4, z * 4, 5);
+    let c = mix([112, 80, 62], [196, 166, 140], n);
+    c = mix(c, [150, 98, 70], smoothstep(fbm(x * 2 + 8, y * 2, z * 2, 3), 0.55, 0.75) * 0.6);
+    // the pale heart-shaped plain (Tombaugh Regio)
+    const d = Math.hypot(x - 0.55, (y + 0.05) * 1.4, z - 0.75);
+    return mix(c, [238, 224, 206], clamp(1 - d / 0.3, 0, 1) * 0.9);
   },
   jupiter(x, y, z) {
     const warp = fbm(x * 3, y * 6, z * 3, 4);
@@ -231,17 +220,15 @@ function createPlanet(o) {
   return planet;
 }
 
-// roughly solar-system order; the text sections follow this list
+// real planets in solar-system order (from Earth outwards, plus Pluto); the text sections follow this list
 const planets = [
   createPlanet({ radius: 12, paint: 'earth', res: 1024, bump: 1.2, clouds: true, moon: true, atmosphere: 0x5aa8ff, atmK: 1.1, tilt: [0.25, 0.4], spin: 0.00008, rough: 0.6 }),
   createPlanet({ radius: 7, paint: 'mars', res: 1024, bump: 2.0, atmosphere: 0xff8a5a, atmK: 0.35, tilt: [0.3, -0.3], spin: 0.00007 }),
-  createPlanet({ radius: 9, paint: 'venus', res: 1024, atmosphere: 0xf3c8a0, atmK: 0.6, tilt: [0.15, 0.5], spin: 0.00006 }),
-  createPlanet({ radius: 10, paint: 'verdant', res: 1024, atmosphere: 0x8fe0b8, atmK: 0.5, tilt: [0.25, -0.2], spin: 0.00009 }),
-  createPlanet({ radius: 11, paint: 'amethyst', res: 1024, atmosphere: 0xbfa4ff, atmK: 0.5, tilt: [0.2, 0.3], spin: 0.0001 }),
   createPlanet({ radius: 18, paint: 'jupiter', res: 1024, atmosphere: 0xf2b27a, atmK: 0.18, tilt: [0.1, 0.1], spin: 0.00012 }),
   createPlanet({ radius: 12, paint: 'saturn', res: 1024, atmosphere: 0xe9cf8a, atmK: 0.18, tilt: [0.5, -0.35], spin: 0.0001, rings: { kind: 'saturn', range: [1.35, 2.35] } }),
   createPlanet({ radius: 10, paint: 'uranus', atmosphere: 0x9eeef2, atmK: 0.5, tilt: [0.3, 1.35], spin: 0.00008, rings: { kind: 'uranus', range: [1.5, 2.1] } }),
   createPlanet({ radius: 10, paint: 'neptune', atmosphere: 0x6f8cff, atmK: 0.55, tilt: [0.2, 0.2], spin: 0.00009 }),
+  createPlanet({ radius: 5, paint: 'pluto', res: 1024, bump: 1.5, atmosphere: 0x7fa0d8, atmK: 0.2, tilt: [0.25, -0.3], spin: 0.00006 }),
 ];
 const N = planets.length;
 
