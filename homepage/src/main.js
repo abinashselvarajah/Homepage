@@ -13,9 +13,7 @@ renderer.setClearColor(0x000000, 0);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setSize(innerWidth, innerHeight);
 
-/* =====================================================================
-   Procedural textures (seamless 3D value noise sampled on the sphere)
-   ===================================================================== */
+// Procedural textures: 3D value noise sampled on the sphere, so they tile seamlessly
 function hash3(x, y, z) {
   let h = Math.imul(x, 374761393) ^ Math.imul(y, 668265263) ^ Math.imul(z, 1274126177);
   h = Math.imul(h ^ (h >>> 13), 1274126177);
@@ -38,6 +36,11 @@ function fbm(x, y, z, oct = 5) {
   for (let i = 0; i < oct; i++) { s += a * vnoise(x * f, y * f, z * f); n += a; f *= 2; a *= 0.5; }
   return s / n;
 }
+const toTexture = canvas => {
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+};
 const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
 
 function makeTexture(w, h, painter) {
@@ -56,8 +59,7 @@ function makeTexture(w, h, painter) {
     }
   }
   ctx.putImageData(img, 0, 0);
-  const tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
+  const tex = toTexture(c);
   tex.anisotropy = 4;
   return tex;
 }
@@ -139,15 +141,11 @@ function ringTexture(kind) {
     img.data.set([col[0], col[1], col[2], clamp(a, 0, 1) * 255], i * 4);
   }
   ctx.putImageData(img, 0, 0);
-  const tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  return tex;
+  return toTexture(c);
 }
 
-/* =====================================================================
-   Planets
-   ===================================================================== */
-// thin rim glow that only shows on the sunlit limb (uniform L = world-space direction to the key light)
+// Planets
+// thin rim glow, only on the sunlit limb (L = world-space direction to the key light)
 const atmosphereMat = (color, strength) => new THREE.ShaderMaterial({
   uniforms: { c: { value: new THREE.Color(color) }, k: { value: strength }, L: { value: new THREE.Vector3(0, 1, 0) } },
   vertexShader: `varying vec3 vN; varying vec3 vW;
@@ -169,18 +167,18 @@ function createPlanet(o) {
   tilt.rotation.set(o.tilt?.[0] ?? 0.2, 0, o.tilt?.[1] ?? 0.1);
   group.add(tilt);
 
+  const res = o.res ?? 512;
+  const map = makeTexture(res, res / 2, painters[o.paint]);
   const mesh = new THREE.Mesh(
     new THREE.SphereGeometry(o.radius, 96, 64),
-    new THREE.MeshStandardMaterial({ map: null, roughness: o.rough ?? 0.9, metalness: 0 })
+    new THREE.MeshStandardMaterial({ map, roughness: o.rough ?? 0.9, bumpMap: o.bump ? map : null, bumpScale: o.bump ?? 1 })
   );
-  mesh.material.map = makeTexture(o.res ?? 512, (o.res ?? 512) / 2, painters[o.paint]);
-  if (o.bump) { mesh.material.bumpMap = mesh.material.map; mesh.material.bumpScale = o.bump; }
   tilt.add(mesh);
 
   const atm = new THREE.Mesh(new THREE.SphereGeometry(o.radius * 1.035, 64, 48), atmosphereMat(o.atmosphere, o.atmK));
   group.add(atm);
 
-  const planet = { group, mesh, atm, radius: o.radius, accent: o.accent, spin: o.spin ?? 0.00006 };
+  const planet = { group, mesh, atm, radius: o.radius, spin: o.spin };
 
   if (o.clouds) {
     planet.clouds = new THREE.Mesh(
@@ -214,20 +212,18 @@ function createPlanet(o) {
   return planet;
 }
 
-// outward through the solar system; text sections line up with this list
+// in real solar-system order; the text sections follow this list
 const planets = [
-  createPlanet({ radius: 12, paint: 'earth', res: 1024, bump: 1.2, clouds: true, moon: true, atmosphere: 0x5aa8ff, atmK: 1.1, tilt: [0.25, 0.4], accent: 0x5aa9ff, spin: 0.00008, rough: 0.6 }),
-  createPlanet({ radius: 7, paint: 'mars', res: 1024, bump: 2.0, atmosphere: 0xff8a5a, atmK: 0.35, tilt: [0.3, -0.3], accent: 0xff8a5c, spin: 0.00007 }),
-  createPlanet({ radius: 18, paint: 'jupiter', res: 1024, atmosphere: 0xf2b27a, atmK: 0.18, tilt: [0.1, 0.1], accent: 0xf2c48d, spin: 0.00012 }),
-  createPlanet({ radius: 12, paint: 'saturn', res: 1024, atmosphere: 0xe9cf8a, atmK: 0.18, tilt: [0.5, -0.35], accent: 0xe9d28f, spin: 0.0001, rings: { kind: 'saturn', range: [1.35, 2.35] } }),
-  createPlanet({ radius: 10, paint: 'uranus', atmosphere: 0x9eeef2, atmK: 0.5, tilt: [0.3, 1.35], accent: 0x7fe3e8, spin: 0.00008, rings: { kind: 'uranus', range: [1.5, 2.1] } }),
-  createPlanet({ radius: 10, paint: 'neptune', atmosphere: 0x6f8cff, atmK: 0.55, tilt: [0.2, 0.2], accent: 0x6f8cff, spin: 0.00009 }),
+  createPlanet({ radius: 12, paint: 'earth', res: 1024, bump: 1.2, clouds: true, moon: true, atmosphere: 0x5aa8ff, atmK: 1.1, tilt: [0.25, 0.4], spin: 0.00008, rough: 0.6 }),
+  createPlanet({ radius: 7, paint: 'mars', res: 1024, bump: 2.0, atmosphere: 0xff8a5a, atmK: 0.35, tilt: [0.3, -0.3], spin: 0.00007 }),
+  createPlanet({ radius: 18, paint: 'jupiter', res: 1024, atmosphere: 0xf2b27a, atmK: 0.18, tilt: [0.1, 0.1], spin: 0.00012 }),
+  createPlanet({ radius: 12, paint: 'saturn', res: 1024, atmosphere: 0xe9cf8a, atmK: 0.18, tilt: [0.5, -0.35], spin: 0.0001, rings: { kind: 'saturn', range: [1.35, 2.35] } }),
+  createPlanet({ radius: 10, paint: 'uranus', atmosphere: 0x9eeef2, atmK: 0.5, tilt: [0.3, 1.35], spin: 0.00008, rings: { kind: 'uranus', range: [1.5, 2.1] } }),
+  createPlanet({ radius: 10, paint: 'neptune', atmosphere: 0x6f8cff, atmK: 0.55, tilt: [0.2, 0.2], spin: 0.00009 }),
 ];
 const N = planets.length;
 
-/* =====================================================================
-   Lighting: warm key + cool rim point light per planet, soft ambient fill
-   ===================================================================== */
+// Lighting: a warm key and a cool rim point light per planet, plus soft ambient fill
 scene.add(new THREE.AmbientLight(0x2c3270, 0.6));
 const rimColors = [0x4aa8ff, 0xff5c8a, 0x9a6bff, 0x38d6c4, 0xff7ad9, 0x5a6bff];
 const KEY_D = 62, RIM_D = 70;
@@ -237,9 +233,7 @@ planets.forEach((p, k) => {
   scene.add(p.key, p.rim);
 });
 
-/* =====================================================================
-   Stars: random colours, three sizes, soft round sprites
-   ===================================================================== */
+// Stars: random colours, three sizes, soft round sprites
 const spriteTex = (() => {
   const c = document.createElement('canvas'); c.width = c.height = 64;
   const g = c.getContext('2d'), grad = g.createRadialGradient(32, 32, 0, 32, 32, 32);
@@ -274,9 +268,7 @@ const starLayers = [[1100, 1.1], [500, 1.9], [160, 3.2]].map(([count, size]) => 
   return mat;
 });
 
-/* =====================================================================
-   Rocket (nose along local +y)
-   ===================================================================== */
+// Rocket (nose along local +y)
 const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, metalness: 0.25, roughness: 0.35, ...o });
 const redMat = std(0xe8392e), whiteMat = std(0xf4f6fa), darkMat = std(0x2b2f3a, { metalness: 0.6, roughness: 0.4 });
 
@@ -326,9 +318,6 @@ const flameLight = new THREE.PointLight(0xff8a30, 60, 40, 2);
 flameLight.position.y = -5.5;
 body.add(flameLight);
 
-const ROCKET_SCALE = 0.85;
-let rocketScale = ROCKET_SCALE;
-rocket.scale.setScalar(rocketScale);
 scene.add(rocket);
 
 /* exhaust trail */
@@ -363,11 +352,9 @@ function updateTrail(dt) {
   trailGeo.attributes.color.needsUpdate = true;
 }
 
-/* =====================================================================
-   Layout: planets on alternating sides (opposite the text), rocket waypoints
-   ===================================================================== */
+// Layout: planets alternate sides (opposite the text); rocket stops beside each planet
 const rocketStops = planets.map(() => new THREE.Vector3());
-const padNormal = new THREE.Vector3();
+const padNormal = new THREE.Vector3(-0.55, 0.72, 0.42).normalize();
 function layout() {
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
@@ -384,31 +371,25 @@ function layout() {
     p.group.position.set(x, y, -k * SPZ);
     p.group.scale.setScalar(ps);
     const R = p.radius * ps;
-    p.side = side;
-    p.R = R;
 
-    // key light: warm, from the screen-centre side, above and in front; rim: cool, from behind the outer edge
+    // key light: warm, from the centre side, above and in front; rim light: cool, behind the outer edge
     p.key.position.set(x - side * 40 * ps, y + 34, -k * SPZ + 44);
     p.rim.position.set(x + side * 52 * ps, y + 14, -k * SPZ - 42);
 
-    // atmosphere only glows on the side facing the key light
     p.atm.material.uniforms.L.value.copy(p.key.position).sub(p.group.position).normalize();
 
-    // the rocket hovers beside its planet
+    // the rocket hovers beside each planet
     if (k > 0) rocketStops[k].set(x - side * (R * 1.25 + 5 * ps), y, -k * SPZ + R + 9);
   });
 
   // Earth: the rocket stands on a launch pad on the upper-left of the planet, nose along the surface normal
-  rocketScale = ROCKET_SCALE * clamp(ps, 0.6, 1);
+  const rocketScale = 0.85 * clamp(ps, 0.6, 1);
   rocket.scale.setScalar(rocketScale);
-  padNormal.set(-0.55, 0.72, 0.42).normalize();
-  rocketStops[0].copy(planets[0].group.position).addScaledVector(padNormal, planets[0].R + 4.4 * rocketScale + 0.15);
+  rocketStops[0].copy(planets[0].group.position).addScaledVector(padNormal, planets[0].radius * ps + 4.4 * rocketScale + 0.15);
   updateTarget();
 }
 
-/* =====================================================================
-   Scroll
-   ===================================================================== */
+// Scroll
 let target = 0, current = 0;
 function updateTarget() {
   const max = document.documentElement.scrollHeight - innerHeight;
@@ -417,38 +398,17 @@ function updateTarget() {
 addEventListener('scroll', updateTarget, { passive: true });
 addEventListener('resize', layout);
 
-const sections = [...document.querySelectorAll('main > section')];
 const io = new IntersectionObserver(
   entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')),
   { threshold: 0.3 }
 );
-sections.forEach(el => { el.classList.add('reveal'); io.observe(el); });
+document.querySelectorAll('main > section').forEach(el => { el.classList.add('reveal'); io.observe(el); });
 
-/* =====================================================================
-   Animation loop
-   ===================================================================== */
+// Animation loop
 const UP = new THREE.Vector3(0, 1, 0);
-const P1 = new THREE.Vector3(), P2 = new THREE.Vector3(), T = new THREE.Vector3();
-const pos = new THREE.Vector3(), tan = new THREE.Vector3();
+const path = new THREE.CubicBezierCurve3(), T = new THREE.Vector3(), tan = new THREE.Vector3();
 const qGoal = new THREE.Quaternion();
 let last = 0, first = true;
-
-function bezier(a, b, c, d, u, out) {
-  const m = 1 - u;
-  return out.set(
-    m * m * m * a.x + 3 * m * m * u * b.x + 3 * m * u * u * c.x + u * u * u * d.x,
-    m * m * m * a.y + 3 * m * m * u * b.y + 3 * m * u * u * c.y + u * u * u * d.y,
-    m * m * m * a.z + 3 * m * m * u * b.z + 3 * m * u * u * c.z + u * u * u * d.z
-  );
-}
-function bezierTangent(a, b, c, d, u, out) {
-  const m = 1 - u;
-  return out.set(
-    3 * m * m * (b.x - a.x) + 6 * m * u * (c.x - b.x) + 3 * u * u * (d.x - c.x),
-    3 * m * m * (b.y - a.y) + 6 * m * u * (c.y - b.y) + 3 * u * u * (d.y - c.y),
-    3 * m * m * (b.z - a.z) + 6 * m * u * (c.z - b.z) + 3 * u * u * (d.z - c.z)
-  );
-}
 
 renderer.setAnimationLoop(time => {
   const dt = Math.min((time - last) / 1000, 0.05);
@@ -463,7 +423,6 @@ renderer.setAnimationLoop(time => {
   camera.position.set(Math.sin(time / 6000) * 1.5, Math.cos(time / 7000), CAMD - (i + e) * SPZ);
   camera.lookAt(0, 0, camera.position.z - 100);
 
-  // planets
   planets.forEach(p => {
     p.mesh.rotation.y = time * p.spin;
     if (p.clouds) p.clouds.rotation.y = time * p.spin * 1.35;
@@ -479,14 +438,14 @@ renderer.setAnimationLoop(time => {
   const A = rocketStops[i], B = rocketStops[i + 1];
   if (i === 0) T.copy(padNormal).multiplyScalar(34).setZ(T.z + (B.z - A.z) / 3 * 0.5);
   else T.set(0, 26, (B.z - A.z) / 3);
-  P1.copy(A).add(T);
-  P2.copy(B).sub(T);
-  bezier(A, P1, P2, B, e, pos);
-  if (!(i === 0 && e < 0.02)) pos.y += Math.sin(time / 700) * 0.5 * smoothstep(e, 0.02, 0.1);
-  rocket.position.copy(pos);
-  rocket.scale.setScalar(rocketScale);
+  path.v0.copy(A);
+  path.v1.copy(A).add(T);
+  path.v2.copy(B).sub(T);
+  path.v3.copy(B);
+  path.getPoint(e, rocket.position);
+  rocket.position.y += Math.sin(time / 700) * 0.5 * smoothstep(e, 0.02, 0.1); // gentle bob while flying
 
-  bezierTangent(A, P1, P2, B, e, tan);
+  path.getTangent(e, tan);
   tan.z *= i === 0 ? lerp(1, 0.25, smoothstep(e, 0, 0.2)) : 0.25; // show more profile than depth; exact pad normal at liftoff
   tan.normalize();
   qGoal.setFromUnitVectors(UP, tan);
@@ -494,14 +453,12 @@ renderer.setAnimationLoop(time => {
   else rocket.quaternion.slerp(qGoal, 1 - Math.exp(-dt * 7));
   body.rotation.y = time / 900 + e * Math.PI * 2;
 
-  // flame power follows how fast the hop is progressing
   let power = Math.sin(Math.PI * e);
   if (i === 0) power = Math.max(power, smoothstep(e, 0, 0.04) * (1 - smoothstep(e, 0.25, 0.6))); // full thrust at liftoff
   const flick = 1 + Math.sin(time / 35) * 0.08 + Math.sin(time / 53) * 0.06;
   flame.scale.set(1 + power * 0.1, (0.75 + power * 0.95) * flick, 1 + power * 0.1);
   flameLight.intensity = 50 + power * 90;
 
-  // exhaust
   rocket.updateMatrixWorld();
   _tail.set(0, -4.4, 0).applyMatrix4(rocket.matrixWorld);
   _down.copy(UP).negate().applyQuaternion(rocket.quaternion);
