@@ -72,7 +72,6 @@
           <h3 class="project">Autonomous Vehicles and Artificial Intelligence 2023</h3>
           <p class="prose project-intro">Driving a racetrack with nothing but a camera and LiDAR: our TurtleBot3 had to find its own way between coloured cones.</p>
           <p class="prose">The robot detects the cones with a YOLOv5 model and places them in space by fusing the detections with LiDAR distances. Because its odometry drifted, Cartographer SLAM corrected its position, and the cones were collected in an occupancy map. A controller then steers towards the midpoint between the nearest blue and yellow cone.</p>
-          <p class="prose">The TurtleBot drives simple and round tracks; odometry drift and slow on-board processing remained the limits.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
@@ -87,7 +86,6 @@
           <h3 class="project">Autonomous Vehicles and Artificial Intelligence 2025</h3>
           <p class="prose project-intro">Same task, faster hardware: we ported the approach to an F1TENTH racecar.</p>
           <p class="prose">A RealSense camera and a YOLOv11 model detect the cones, trained on real images and on different shares of synthetic ones. The detections are fused with LiDAR data, clustered with DBSCAN and mapped, and the controller aims for the midpoint between the nearest blue and yellow cone, predicting a missing cone when only one colour is visible.</p>
-          <p class="prose">The racecar navigates the track with camera and LiDAR only. Its steering works fundamentally differently, so most of the driving code had to be rewritten.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>C#</li></ul>
@@ -102,7 +100,6 @@
           <h3 class="project">Human-Centered Robotics</h3>
           <p class="prose project-intro">A worker with cerebral palsy presses small rubber and metal parts in a sheltered workshop; placing the metal part and operating the lever are the hardest steps. We built a robot assistant for them.</p>
           <p class="prose">After a workshop visit we defined a persona and requirements and worked in Scrum sprints. The ABB YuMi is programmed in Python with hand-taught motion targets. To pick up loose parts, OpenCV finds each part and its orientation in a webcam image, and a 3D-printed holder keeps the metal part stable. The worker controls the robot by voice, with the hot word “Hey YuMi” and the OpenAI API for small talk, while an emergency stop secures every movement.</p>
-          <p class="prose">The system meets all requirements; occasional robot errors remain to be analysed.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>RAPID</li></ul>
@@ -120,7 +117,7 @@
         <div class="proj">
           <h3 class="project">Membership Inference Attacks</h3>
           <p class="prose project-intro">Was a given text part of a language model’s training data? Membership inference attacks answer this, which matters for copyright and data leakage, but a single attack is unreliable when the data distribution varies.</p>
-          <p class="prose">I therefore combine many attack signals instead of trusting one: I extended an existing framework from 10 to 644 features by adding reference-model-based attacks, and replaced its linear combiner with stronger classifiers such as XGBoost and an MLP. The attack is tested on Pythia-2.8B and 6.9B across eight subsets of The Pile, and against a model protected by the DuoLearn defense.</p>
+          <p class="prose">I therefore combine many attack signals instead of trusting one: I extended an existing framework from 10 to 644 attack features, and replaced its linear combiner with more complex classifiers such as XGBoost and an MLP. The attack is tested on Pythia-2.8B and 6.9B across eight subsets of The Pile.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
