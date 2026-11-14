@@ -427,7 +427,8 @@ new ResizeObserver(() => { measure(); updateTarget(); }).observe(document.queryS
 
 const io = new IntersectionObserver(
   entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')),
-  { threshold: 0.3 }
+  // a ratio threshold never fires for sections taller than the viewport, so reveal as soon as the top enters
+  { threshold: 0, rootMargin: '0px 0px -20% 0px' }
 );
 document.querySelectorAll('main > section').forEach(el => { el.classList.add('reveal'); io.observe(el); });
 
