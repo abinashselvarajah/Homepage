@@ -84,10 +84,10 @@ a { color: var(--accent); text-underline-offset: 4px; }
   text-decoration: none;
   border: 1px solid var(--accent);
   border-radius: 999px;
-  background: rgba(255, 138, 92, 0.08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   transition: background 0.2s, transform 0.2s;
 }
-.doc-link:hover { background: rgba(255, 138, 92, 0.2); transform: translateY(-2px); }
+.doc-link:hover { background: color-mix(in srgb, var(--accent) 20%, transparent); transform: translateY(-2px); }
 .doc-lang { font-weight: 400; opacity: 0.7; }
 
 /* computer vision: project block */
@@ -97,20 +97,38 @@ a { color: var(--accent); text-underline-offset: 4px; }
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #fff;
+  color: color-mix(in srgb, var(--accent) 60%, #fff);
 }
 .prose { text-align: justify; hyphens: manual; margin-bottom: 1.55em !important; }
 
 /* computer vision: skills and tools as chips */
 .tags { margin-top: 14px; }
-.tags-label { margin: 12px 0 8px !important; font-size: 0.75rem !important; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.tags-label { margin: 12px 0 8px !important; font-size: 0.75rem !important; letter-spacing: 0.2em; text-transform: uppercase; color: color-mix(in srgb, var(--accent) 60%, #fff); }
 .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 main > section:nth-child(even) .chips { justify-content: flex-end; }
 .chips li {
   padding: 3px 12px;
   font-size: 0.85rem;
-  border: 1px solid rgba(255, 138, 92, 0.45);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
   border-radius: 999px;
-  background: rgba(255, 138, 92, 0.07);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
 }
 @media (max-width: 700px) { main > section:nth-child(n) .chips { justify-content: flex-start; } }
+
+/* robotics: several projects in one section */
+main > section > .proj { max-width: 40em; margin-bottom: 2.6em; }
+.proj > p, .proj > .tags { max-width: 30em; }
+.proj-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 6px 0 18px; }
+.proj .tags { margin-top: 4px; }
+.proj .chips { margin-bottom: 18px; }
+.videos { display: grid; grid-template-columns: repeat(auto-fit, minmax(15em, 1fr)); gap: 16px; }
+.videos figure { margin: 0; min-width: 0; }
+.videos iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+.videos figcaption { margin-top: 8px; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }

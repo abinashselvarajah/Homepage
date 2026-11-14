@@ -38,7 +38,7 @@
         <p class="kicker"></p>
         <h2>Computervision</h2>
         <h3 class="project">Synthetic vs. Real</h3>
-        <p class="prose project-intro">Can virtual images replace real ones when training industrial recognition systems? My thesis investigates how suitable synthetic data is.</p>
+        <p class="prose project-intro">Can virtual images replace real ones when training industrial recognition systems? My project investigates how suitable synthetic data is.</p>
         <p class="prose">I started from a real image dataset of 3D-modelled Makeblock parts and recreated it in Unity. With the Perception tool, I generated synthetic images using domain randomizers for colour, rotation, texture, background and sun angle, which adds the variety a purely virtual dataset lacks.</p>
         <p class="prose">On this data I trained a CNN for image classification in Keras and an SSD MobileNet V2 model for object detection with TensorFlow. I first compared the randomized parameters one by one, then trained networks on different shares of real and synthetic images and evaluated them with accuracy and detection metrics.</p>
         <p class="prose">The result: synthetic data is a good way to extend a real dataset, but only if the randomization is chosen with care.</p>
@@ -52,6 +52,34 @@
         <div class="pair">
           <figure><img src="/src/assets/real-image.jpg" alt="Photo of a blue perforated metal part lying on a newspaper" loading="lazy"><figcaption>Real image</figcaption></figure>
           <figure><img src="/src/assets/synthetic-image.jpg" alt="Synthetic image of blue perforated parts on a randomised background" loading="lazy"><figcaption>Synthetic image</figcaption></figure>
+        </div>
+      </section>
+
+      <section style="--accent:#ee9db8">
+        <p class="kicker"></p>
+        <h2>Robotics</h2>
+
+        <div class="proj">
+          <h3 class="project">AVAI 2023 · TurtleBot Racetrack</h3>
+          <p class="prose">A TurtleBot3 had to drive a racetrack marked by coloured cones on its own. In ROS 2, a camera node feeds a YOLOv5 model that detects the cones, and LiDAR data is fused with the detections to place them in space. Cartographer SLAM and an occupancy map keep track of the cones, and a movement controller steers towards the next target point between the blue and yellow cones.</p>
+          <div class="tags"><ul class="chips"><li>Python</li><li>ROS 2</li><li>YOLOv5</li><li>OpenCV</li><li>Cartographer</li></ul></div>
+          <div class="proj-links"><a class="doc-link" href="https://github.com/RUB-AVAI/allassignmens-35" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>GitHub</a></div>
+          <div class="videos"><figure><iframe src="https://www.youtube-nocookie.com/embed/JIVdeuSpd4E" title="Simple racetrack" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe><figcaption>Simple racetrack</figcaption></figure><figure><iframe src="https://www.youtube-nocookie.com/embed/aXM5ywss980" title="Round racetrack" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe><figcaption>Round racetrack</figcaption></figure></div>
+        </div>
+
+        <div class="proj">
+          <h3 class="project">AVAI 2025 · Racecar</h3>
+          <p class="prose">The same challenge, now on a racecar with Ackermann steering. A RealSense camera and a YOLOv11 Nano model, trained on real and synthetic cone images, detect the cones. We fuse these detections with LiDAR data, cluster them with DBSCAN into an occupancy map and let a controller compute the path through the track.</p>
+          <div class="tags"><ul class="chips"><li>Python</li><li>ROS 2</li><li>YOLOv11</li><li>OpenCV</li><li>RealSense</li></ul></div>
+          <div class="proj-links"><a class="doc-link" href="https://github.com/RUB-AVAI/racecar-turtlebot-32" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>GitHub</a><a class="doc-link" href="https://github.com/RUB-AVAI/racecar-turtlebot-32/blob/main/AVAI_Final_Report.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Report</a></div>
+          <div class="videos"><figure><iframe src="https://www.youtube-nocookie.com/embed/VUXPDdpeL6c" title="Racecar demo" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe><figcaption>Racecar demo</figcaption></figure></div>
+        </div>
+
+        <div class="proj">
+          <h3 class="project">Human-Centered Robotics · YuMi</h3>
+          <p class="prose">An assistance system for a worker with cerebral palsy in a sheltered workshop, who presses small rubber and metal parts together. The dual-arm ABB YuMi supports this task and is programmed in Python, with robot targets taught by hand and stored as JSON. The worker talks to it: the hot word “Hey YuMi” is detected with Picovoice Porcupine, speech is processed with Google Speech-to-Text, and ChatGPT provides small talk. A safety concept completes the system.</p>
+          <div class="tags"><ul class="chips"><li>Python</li><li>ABB YuMi</li><li>RAPID</li><li>Porcupine</li><li>ChatGPT</li></ul></div>
+          <div class="proj-links"><a class="doc-link" href="https://github.com/abinashselvarajah/Assistenzsystem-fuer-Verpressung" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>GitHub</a><a class="doc-link" href="https://github.com/abinashselvarajah/Assistenzsystem-fuer-Verpressung/blob/main/documentation/main.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation <span class="doc-lang">(German)</span></a></div>
         </div>
       </section>
 
