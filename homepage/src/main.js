@@ -1,7 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
 
-const { clamp, lerp, smoothstep, degToRad } = THREE.MathUtils;
+const { clamp, lerp, smoothstep, degToRad, randFloat, randFloatSpread } = THREE.MathUtils;
 
 const canvas = document.querySelector('#bg');
 const scene = new THREE.Scene();
@@ -243,6 +243,7 @@ const planets = [
   createPlanet({ radius: 5, paint: 'pluto', res: 1024, bump: 1.5, atmosphere: 0x7fa0d8, atmK: 0.2, tilt: [0.25, -0.3], spin: 0.00006 }),
 ];
 const N = planets.length;
+const sideOf = k => (k % 2 === 0 ? 1 : -1); // planets alternate sides, the text sits opposite
 
 // Lighting: a warm key and a cool rim point light per planet, plus soft ambient fill
 scene.add(new THREE.AmbientLight(0x2c3270, 0.6));
@@ -274,11 +275,11 @@ const starLayers = [[1700, 2.4], [750, 4], [260, 6.5]].map(([count, size]) => {
   const pos = new Float32Array(count * 3), col = new Float32Array(count * 3), color = new THREE.Color();
   for (let i = 0; i < count; i++) {
     pos.set([
-      THREE.MathUtils.randFloatSpread(4600),
-      THREE.MathUtils.randFloatSpread(1700),
-      THREE.MathUtils.randFloat(-1150, -900),
+      randFloatSpread(4600),
+      randFloatSpread(1700),
+      randFloat(-1150, -900),
     ], i * 3);
-    color.setHSL(Math.random(), THREE.MathUtils.randFloat(0.45, 1), THREE.MathUtils.randFloat(0.68, 0.9));
+    color.setHSL(Math.random(), randFloat(0.45, 1), randFloat(0.68, 0.9));
     col.set([color.r, color.g, color.b], i * 3);
   }
   const geo = new THREE.BufferGeometry();
@@ -391,7 +392,7 @@ function layout() {
   const ps = clamp(camera.aspect / 1.4, 0.45, 1);
 
   planets.forEach((p, k) => {
-    const side = k % 2 === 0 ? 1 : -1;
+    const side = sideOf(k);
     const x = narrow ? side * 0.15 * halfW : side * 0.46 * halfW;
     const y = narrow ? -0.4 * halfH : 0;
     p.group.position.set(x, y, -k * SPZ);
@@ -458,13 +459,10 @@ let last = 0, first = true;
 // half a lap around planet k: from the front, round its outer side (away from the text), to the back,
 // where the rocket is heading towards the next planet
 const _o2 = new THREE.Vector3(), _hA = new THREE.Vector3(), _hB = new THREE.Vector3(), _hC = new THREE.Vector3();
-const sideOf = k => (k % 2 === 0 ? 1 : -1);
 function orbitPos(k, t, out) {
   const c = planets[k].group.position, r = orbitR[k], ph = t * Math.PI;
   return out.set(c.x + sideOf(k) * r * Math.sin(ph), c.y + 0.25 * r * Math.sin(ph), c.z + r * Math.cos(ph));
 }
-// exit point behind planet k and heading of the lap at its start / end
-function orbitExit(k, out) { return orbitPos(k, 1, out); }
 function orbitDir(k, t, out) { return orbitPos(k, t + 0.002, out).sub(orbitPos(k, t, _o2)).normalize(); }
 
 renderer.setAnimationLoop(time => {
@@ -499,7 +497,7 @@ renderer.setAnimationLoop(time => {
 
   // rocket path: cubic Bezier from the end of one lap to the start of the next, with matching headings
   if (!orbiting) {
-    const A = i === 0 ? rocketStops[0] : orbitExit(i, _hA), B = rocketStops[i + 1];
+    const A = i === 0 ? rocketStops[0] : orbitPos(i, 1, _hA), B = rocketStops[i + 1];
     const L = Math.max(Math.abs(B.x - A.x) * 0.55, 14);
     if (i === 0) T.copy(padNormal).multiplyScalar(34).setZ(T.z + (B.z - A.z) / 6);
     else T.copy(orbitDir(i, 1, _hC)).multiplyScalar(L); // leave along the heading the lap ended with

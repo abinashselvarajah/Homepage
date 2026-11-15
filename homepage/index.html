@@ -28,12 +28,11 @@
     <main>
       <section style="--accent:#5aa9ff">
         <header>
-          <p class="kicker"></p>
           <h1>Abinash Selvarajah</h1>
           <p class="lead"><em>The only way of discovering the limits of the possible is to venture a little way past them into the impossible.</em> <cite>— Arthur C. Clarke</cite></p>
         </header>
         <h2>About Me</h2>
-        <p class="prose">Software engineer with a passion for artificial intelligence, sparked by science fiction.</p>
+        <p>Software engineer with a passion for artificial intelligence, sparked by science fiction.</p>
         <p class="tags-label">Education</p>
         <ul class="facts">
           <li><strong>M.Sc. Computer Science, AI track</strong> Ruhr-Universität Bochum, October 2023 – May 2026, grade 1.2</li>
@@ -47,19 +46,18 @@
       </section>
 
       <section style="--accent:#ff8a5c">
-        <p class="kicker"></p>
         <h2>Computervision</h2>
         <h3 class="project">Synthetic vs. Real</h3>
-        <p class="prose project-intro">Real training images for industrial recognition systems are scarce, so we asked how far synthetic images can take over.</p>
-        <p class="prose">We recreated a real dataset of 3D-modelled Makeblock parts in Unity and generated synthetic variants with the Perception tool, varying colour, rotation, texture, background and lighting to cover what the real photos lack. Classification and detection networks were then trained on different mixes of real and synthetic images and compared.</p>
-        <p class="prose">Synthetic data extends real data well, but only when the randomization is chosen carefully.</p>
+        <p>Real training images for industrial recognition systems are scarce, so we asked how far synthetic images can take over.</p>
+        <p>We recreated a real dataset of 3D-modelled Makeblock parts in Unity and generated synthetic variants with the Perception tool, varying colour, rotation, texture, background and lighting to cover what the real photos lack. Classification and detection networks were then trained on different mixes of real and synthetic images and compared.</p>
+        <p>Synthetic data extends real data well, but only when the randomization is chosen carefully.</p>
         <div class="tags">
           <p class="tags-label">Languages</p>
           <ul class="chips"><li>Python</li><li>C#</li></ul>
           <p class="tags-label">Tools</p>
           <ul class="chips"><li>Unity</li><li>TensorFlow</li><li>Keras</li></ul>
         </div>
-        <p class="doc"><a class="doc-link" href="https://ruhr-uni-bochum.sciebo.de/s/fwgSCcPYEBosSjw" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation <span class="doc-lang">(German)</span></a></p>
+        <p class="doc"><a class="doc-link file" href="https://ruhr-uni-bochum.sciebo.de/s/fwgSCcPYEBosSjw" target="_blank" rel="noopener">Documentation <span class="doc-lang">(German)</span></a></p>
         <div class="pair">
           <figure><img src="/src/assets/real-image.jpg" alt="Photo of a blue perforated metal part lying on a newspaper" loading="lazy"><figcaption>Real image</figcaption></figure>
           <figure><img src="/src/assets/synthetic-image.jpg" alt="Synthetic image of blue perforated parts on a randomised background" loading="lazy"><figcaption>Synthetic image</figcaption></figure>
@@ -67,149 +65,144 @@
       </section>
 
       <section style="--accent:#f2c48d">
-        <p class="kicker"></p>
         <h2>Robotics</h2>
 
         <div class="proj">
           <h3 class="project">Autonomous Vehicles and Artificial Intelligence 2023</h3>
-          <p class="prose project-intro">Driving a racetrack with nothing but a camera and LiDAR: our TurtleBot3 had to find its own way between coloured cones.</p>
-          <p class="prose">The robot detects the cones with a YOLOv5 model and places them in space by fusing the detections with LiDAR distances. Because its odometry drifted, Cartographer SLAM corrected its position, and the cones were collected in an occupancy map. A controller then steers towards the midpoint between the nearest blue and yellow cone.</p>
+          <p>Driving a racetrack with nothing but a camera and LiDAR: our TurtleBot3 had to find its own way between coloured cones.</p>
+          <p>The robot detects the cones with a YOLOv5 model and places them in space by fusing the detections with LiDAR distances. Because its odometry drifted, Cartographer SLAM corrected its position, and the cones were collected in an occupancy map. A controller then steers towards the midpoint between the nearest blue and yellow cone.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>ROS 2</li><li>YOLOv5</li><li>OpenCV</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/RUB-AVAI/allassignmens-35" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a><a class="doc-link" href="https://github.com/RUB-AVAI/allassignmens-35/blob/main/Autonomous_Vehicles_and_Artificial_Intelligence.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/RUB-AVAI/allassignmens-35" target="_blank" rel="noopener">GitHub</a><a class="doc-link file" href="https://github.com/RUB-AVAI/allassignmens-35/blob/main/Autonomous_Vehicles_and_Artificial_Intelligence.pdf" target="_blank" rel="noopener">Documentation</a></div>
           <div class="videos"><figure><iframe src="https://www.youtube-nocookie.com/embed/JIVdeuSpd4E" title="Simple racetrack" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe><figcaption>Simple racetrack</figcaption></figure><figure><iframe src="https://www.youtube-nocookie.com/embed/aXM5ywss980" title="Round racetrack" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe><figcaption>Round racetrack</figcaption></figure></div>
         </div>
 
         <div class="proj">
           <h3 class="project">Autonomous Vehicles and Artificial Intelligence 2025</h3>
-          <p class="prose project-intro">Same task, faster hardware: we ported the approach to an F1TENTH racecar.</p>
-          <p class="prose">A RealSense camera and a YOLOv11 model detect the cones, trained on real images and on different shares of synthetic ones. The detections are fused with LiDAR data, clustered with DBSCAN and mapped, and the controller aims for the midpoint between the nearest blue and yellow cone, predicting a missing cone when only one colour is visible.</p>
+          <p>Same task, faster hardware: we ported the approach to an F1TENTH racecar.</p>
+          <p>A RealSense camera and a YOLOv11 model detect the cones, trained on real images and on different shares of synthetic ones. The detections are fused with LiDAR data, clustered with DBSCAN and mapped, and the controller aims for the midpoint between the nearest blue and yellow cone, predicting a missing cone when only one colour is visible.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>C#</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>ROS 2</li><li>YOLOv11</li><li>OpenCV</li><li>RealSense</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/RUB-AVAI/racecar-turtlebot-32" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a><a class="doc-link" href="https://github.com/RUB-AVAI/racecar-turtlebot-32/blob/main/AVAI_Final_Report.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/RUB-AVAI/racecar-turtlebot-32" target="_blank" rel="noopener">GitHub</a><a class="doc-link file" href="https://github.com/RUB-AVAI/racecar-turtlebot-32/blob/main/AVAI_Final_Report.pdf" target="_blank" rel="noopener">Documentation</a></div>
           <div class="videos"><figure><iframe src="https://www.youtube-nocookie.com/embed/VUXPDdpeL6c" title="Racecar demo" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe><figcaption>Racecar demo</figcaption></figure></div>
         </div>
 
         <div class="proj">
           <h3 class="project">Human-Centered Robotics</h3>
-          <p class="prose project-intro">A worker with cerebral palsy presses small rubber and metal parts in a sheltered workshop; placing the metal part and operating the lever are the hardest steps. We built a robot assistant for them.</p>
-          <p class="prose">After a workshop visit we defined a persona and requirements and worked in Scrum sprints. The ABB YuMi is programmed in Python with hand-taught motion targets. To pick up loose parts, OpenCV finds each part and its orientation in a webcam image, and a 3D-printed holder keeps the metal part stable. The worker controls the robot by voice, with the hot word “Hey YuMi” and the OpenAI API for small talk, while an emergency stop secures every movement.</p>
+          <p>A worker with cerebral palsy presses small rubber and metal parts in a sheltered workshop; placing the metal part and operating the lever are the hardest steps. We built a robot assistant for them.</p>
+          <p>After a workshop visit we defined a persona and requirements and worked in Scrum sprints. The ABB YuMi is programmed in Python with hand-taught motion targets. To pick up loose parts, OpenCV finds each part and its orientation in a webcam image, and a 3D-printed holder keeps the metal part stable. The worker controls the robot by voice, with the hot word “Hey YuMi” and the OpenAI API for small talk, while an emergency stop secures every movement.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>RAPID</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>RobotStudio</li><li>OpenCV</li><li>Porcupine</li><li>OpenAI API</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/abinashselvarajah/Assistenzsystem-fuer-Verpressung" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a><a class="doc-link" href="https://github.com/abinashselvarajah/Assistenzsystem-fuer-Verpressung/blob/main/documentation/main.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation <span class="doc-lang">(German)</span></a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/abinashselvarajah/Assistenzsystem-fuer-Verpressung" target="_blank" rel="noopener">GitHub</a><a class="doc-link file" href="https://github.com/abinashselvarajah/Assistenzsystem-fuer-Verpressung/blob/main/documentation/main.pdf" target="_blank" rel="noopener">Documentation <span class="doc-lang">(German)</span></a></div>
         </div>
       </section>
 
       <section style="--accent:#e9d28f">
-        <p class="kicker"></p>
         <h2>Natural Language Processing</h2>
 
         <div class="proj">
           <h3 class="project">Membership Inference Attacks</h3>
-          <p class="prose project-intro">Was a given text part of a language model’s training data? Membership inference attacks answer this, which matters for copyright and data leakage, but a single attack is unreliable when the data distribution varies.</p>
-          <p class="prose">I therefore combine many attack signals instead of trusting one: I extended an existing framework from 10 to 644 attack features, and replaced its linear combiner with more complex classifiers such as XGBoost and an MLP. The attack is tested on Pythia-2.8B and 6.9B across eight subsets of The Pile.</p>
+          <p>Was a given text part of a language model’s training data? Membership inference attacks answer this, which matters for copyright and data leakage, but a single attack is unreliable when the data distribution varies.</p>
+          <p>I therefore combine many attack signals instead of trusting one: I extended an existing framework from 10 to 644 attack features, and replaced its linear combiner with more complex classifiers such as XGBoost and an MLP. The attack is tested on Pythia-2.8B and 6.9B across eight subsets of The Pile.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>PyTorch</li><li>Hugging Face</li><li>scikit-learn</li><li>XGBoost</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/abinashselvarajah/Masterthesis" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a><a class="doc-link" href="https://ruhr-uni-bochum.sciebo.de/s/FX3ad8AtoPtQCro" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Thesis</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/abinashselvarajah/Masterthesis" target="_blank" rel="noopener">GitHub</a><a class="doc-link file" href="https://ruhr-uni-bochum.sciebo.de/s/FX3ad8AtoPtQCro" target="_blank" rel="noopener">Thesis</a></div>
         </div>
 
         <div class="proj">
           <h3 class="project">Blue Team vs. Red Team</h3>
-          <p class="prose project-intro">Differential privacy is meant to keep training data private. How well does it hold up against membership inference?</p>
-          <p class="prose">We played both sides. As defender, we trained a DistilBERT sentiment classifier on IMDB reviews with DP-SGD at different privacy budgets. As attacker, we used the RMIA and LiRA attacks against it and compared how attack success, accuracy and F1 change with the budget.</p>
+          <p>Differential privacy is meant to keep training data private. How well does it hold up against membership inference?</p>
+          <p>We played both sides. As defender, we trained a DistilBERT sentiment classifier on IMDB reviews with DP-SGD at different privacy budgets. As attacker, we used the RMIA and LiRA attacks against it and compared how attack success, accuracy and F1 change with the budget.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>PyTorch</li><li>Opacus</li><li>Hugging Face</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/Hydropic/privacy-attack-defense" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a><a class="doc-link" href="https://ruhr-uni-bochum.sciebo.de/s/LPJZ3J2LkJsotF2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/Hydropic/privacy-attack-defense" target="_blank" rel="noopener">GitHub</a><a class="doc-link file" href="https://ruhr-uni-bochum.sciebo.de/s/LPJZ3J2LkJsotF2" target="_blank" rel="noopener">Documentation</a></div>
         </div>
 
         <div class="proj">
           <h3 class="project">LLMs for Repurposing</h3>
-          <p class="prose project-intro">Repurposing keeps used products in use, but finding a new purpose is hard. Can LLMs help? As a co-author, I contributed to a systematic evaluation of GPT-5, Claude Sonnet 4.5 and Gemini 2.5 Pro (DESIGN 2026).</p>
-          <p class="prose">From a literature review we built a validated dataset of 72 documented repurposing cases. Each model received the same zero-shot prompts asking for ten repurposing scenarios and the properties needed to realise them, and I helped set up these experiments (3,120 runs). The answers were matched against the documented cases and checked manually.</p>
+          <p>Repurposing keeps used products in use, but finding a new purpose is hard. Can LLMs help? As a co-author, I contributed to a systematic evaluation of GPT-5, Claude Sonnet 4.5 and Gemini 2.5 Pro (DESIGN 2026).</p>
+          <p>From a literature review we built a validated dataset of 72 documented repurposing cases. Each model received the same zero-shot prompts asking for ten repurposing scenarios and the properties needed to realise them, and I helped set up these experiments (3,120 runs). The answers were matched against the documented cases and checked manually.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
             <p class="tags-label">Models</p>
             <ul class="chips"><li>GPT-5</li><li>Claude Sonnet 4.5</li><li>Gemini 2.5 Pro</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/IPE-PEP/DESIGN-2026" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a><a class="doc-link" href="https://doi.org/10.1017/pds.2026.10483" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Paper</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/IPE-PEP/DESIGN-2026" target="_blank" rel="noopener">GitHub</a><a class="doc-link file" href="https://doi.org/10.1017/pds.2026.10483" target="_blank" rel="noopener">Paper</a></div>
         </div>
 
         <div class="proj">
           <h3 class="project">Spec Extraction by Distillation</h3>
-          <p class="prose project-intro">Large language models read specification pages of product manuals well, but they are expensive in resources and money when many manuals have to be evaluated. Can a small model learn the same job from them?</p>
-          <p class="prose">gpt-5.6-terra labels manual pages as JSON grouped by physical component, or as empty for pages without specifications. On these labels we fine-tune the small vision-language models Qwen3-VL 2B and 4B with LoRA, using 80 % specification pages and 20 % empty pages so that they also learn what to ignore. Held-out manuals test whether the students return valid JSON, recognise empty pages and find the right components and fields.</p>
+          <p>Large language models read specification pages of product manuals well, but they are expensive in resources and money when many manuals have to be evaluated. Can a small model learn the same job from them?</p>
+          <p>gpt-5.6-terra labels manual pages as JSON grouped by physical component, or as empty for pages without specifications. On these labels we fine-tune the small vision-language models Qwen3-VL 2B and 4B with LoRA, using 80 % specification pages and 20 % empty pages so that they also learn what to ignore. Held-out manuals test whether the students return valid JSON, recognise empty pages and find the right components and fields.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>PyTorch</li><li>Hugging Face</li><li>OpenAI API</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/abinashselvarajah/spec-extraction-distillation" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/abinashselvarajah/spec-extraction-distillation" target="_blank" rel="noopener">GitHub</a></div>
         </div>
 
       </section>
 
       <section style="--accent:#7fe3e8">
-        <p class="kicker"></p>
         <h2>Reinforcement Learning</h2>
 
         <div class="proj">
           <h3 class="project">Exploration vs. Exploitation</h3>
-          <p class="prose project-intro">A reinforcement learning agent must balance exploring new options with exploiting what it knows. Which exploration strategy works best in mazes?</p>
-          <p class="prose">We compared constant and annealed ε-greedy, Count Based exploration and UCB on a DQN agent. The test bed is our own Gymnasium maze generator with 10×10 and 20×20 mazes, several seeds, and dense versus sparse rewards, with all runs tracked in Weights &amp; Biases.</p>
+          <p>A reinforcement learning agent must balance exploring new options with exploiting what it knows. Which exploration strategy works best in mazes?</p>
+          <p>We compared constant and annealed ε-greedy, Count Based exploration and UCB on a DQN agent. The test bed is our own Gymnasium maze generator with 10×10 and 20×20 mazes, several seeds, and dense versus sparse rewards, with all runs tracked in Weights &amp; Biases.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>Stable Baselines 3</li><li>Gymnasium</li><li>Weights &amp; Biases</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/cankoeks/gym_labyrinth" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a><a class="doc-link" href="https://ruhr-uni-bochum.sciebo.de/s/erfi8nJeF2Nnez2" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Documentation</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/cankoeks/gym_labyrinth" target="_blank" rel="noopener">GitHub</a><a class="doc-link file" href="https://ruhr-uni-bochum.sciebo.de/s/erfi8nJeF2Nnez2" target="_blank" rel="noopener">Documentation</a></div>
         </div>
       </section>
 
       <section style="--accent:#6f8cff">
-        <p class="kicker"></p>
         <h2>Graph Database</h2>
 
         <div class="proj">
           <h3 class="project">MaLeNa</h3>
-          <p class="prose project-intro">Re-using parts of end-of-life products starts with knowing which devices share the same parts. In MaLeNa, I built the data basis: a graph database of phone specifications.</p>
-          <p class="prose">A scraper reads the phonedb.net datasheets and stores each phone as a Neo4j graph of components and their properties. A final merge step collapses identical components into one shared node, so a single Cypher query shows which phones share a display or battery.</p>
+          <p>Re-using parts of end-of-life products starts with knowing which devices share the same parts. In MaLeNa, I built the data basis: a graph database of phone specifications.</p>
+          <p>A scraper reads the phonedb.net datasheets and stores each phone as a Neo4j graph of components and their properties. A final merge step collapses identical components into one shared node, so a single Cypher query shows which phones share a display or battery.</p>
           <div class="tags">
             <p class="tags-label">Languages</p>
             <ul class="chips"><li>Python</li><li>Cypher</li></ul>
             <p class="tags-label">Tools</p>
             <ul class="chips"><li>Neo4j</li><li>Docker</li><li>BeautifulSoup</li><li>NumPy</li></ul>
           </div>
-          <div class="proj-links"><a class="doc-link" href="https://github.com/abinashselvarajah/malena-graph-db" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.76 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.4-5.27 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>GitHub</a></div>
+          <div class="proj-links"><a class="doc-link gh" href="https://github.com/abinashselvarajah/malena-graph-db" target="_blank" rel="noopener">GitHub</a></div>
         </div>
       </section>
 
       <section style="--accent:#e0bfa3">
-        <p class="kicker"></p>
         <h2>Contact</h2>
-        <p class="prose">You have reached the edge of our solar system. Say hello!</p>
+        <p>You have reached the edge of our solar system. Say hello!</p>
         <p class="links">
           <a href="https://github.com/abinashselvarajah">GitHub</a>
           <a href="https://www.linkedin.com/in/abinash-selvarajah-34590231a/">LinkedIn</a>
