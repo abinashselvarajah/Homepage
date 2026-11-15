@@ -1,5 +1,6 @@
 import './style.css';
 import * as THREE from 'three';
+import earthUrl from './assets/earth.jpg'; // NASA Blue Marble (public domain), NASA Earth Observatory / Reto Stöckli
 
 const { clamp, lerp, smoothstep, degToRad, randFloat, randFloatSpread } = THREE.MathUtils;
 
@@ -43,6 +44,13 @@ const toTexture = canvas => {
 };
 const mix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
 
+function loadTexture(url) {
+  const tex = new THREE.TextureLoader().load(url);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return tex;
+}
+
 function makeTexture(w, h, painter) {
   const c = document.createElement('canvas');
   c.width = w; c.height = h;
@@ -65,24 +73,9 @@ function makeTexture(w, h, painter) {
 }
 
 const painters = {
-  earth(x, y, z) {
-    const e = fbm(x * 2 + 3, y * 2, z * 2, 6);
-    const d = fbm(x * 8, y * 8, z * 8, 3);
-    const h = e + (d - 0.5) * 0.12;
-    let c;
-    if (h < 0.5) {
-      c = mix([6, 24, 82], [28, 112, 196], smoothstep(h, 0.28, 0.5));
-    } else {
-      const l = clamp((h - 0.5) / 0.22, 0, 1);
-      c = mix([52, 132, 62], [168, 142, 82], clamp(l * 1.5, 0, 1));
-      c = mix(c, [225, 225, 228], smoothstep(l, 0.75, 1));
-      if (h < 0.515) c = mix([60, 160, 170], c, (h - 0.5) / 0.015); // shallow coast
-    }
-    return mix(c, [244, 248, 255], smoothstep(Math.abs(y) + (d - 0.5) * 0.15, 0.82, 0.92));
-  },
   clouds(x, y, z) {
     const c = fbm(x * 3 + 9, y * 3 + 4, z * 3, 5);
-    return [255, 255, 255, clamp((c - 0.5) * 3.4, 0, 1) * 235];
+    return [255, 255, 255, clamp((c - 0.55) * 3.4, 0, 1) * 170]; // thin, patchy clouds so the continents stay visible
   },
   moon(x, y, z) {
     const n = fbm(x * 5, y * 5, z * 5, 5);
@@ -188,10 +181,10 @@ function createPlanet(o) {
   group.add(tilt);
 
   const res = o.res ?? 512;
-  const map = makeTexture(res, res / 2, painters[o.paint]);
+  const map = o.image ? loadTexture(o.image) : makeTexture(res, res / 2, painters[o.paint]);
   const mesh = new THREE.Mesh(
     new THREE.SphereGeometry(o.radius, 96, 64),
-    new THREE.MeshStandardMaterial({ map, roughness: o.rough ?? 0.9, bumpMap: o.bump ? map : null, bumpScale: o.bump ?? 1 })
+    new THREE.MeshStandardMaterial({ map, color: new THREE.Color().setScalar(o.brightness ?? 1), roughness: o.rough ?? 0.9, bumpMap: o.bump ? map : null, bumpScale: o.bump ?? 1 })
   );
   tilt.add(mesh);
 
@@ -234,7 +227,7 @@ function createPlanet(o) {
 
 // real planets in solar-system order (from Earth outwards, plus Pluto); the text sections follow this list
 const planets = [
-  createPlanet({ radius: 12, paint: 'earth', res: 1024, bump: 1.2, clouds: true, moon: true, atmosphere: 0x5aa8ff, atmK: 1.1, tilt: [0.25, 0.4], spin: 0.00008, rough: 0.6 }),
+  createPlanet({ radius: 12, image: earthUrl, brightness: 1.7, clouds: true, moon: true, atmosphere: 0x5aa8ff, atmK: 1.1, tilt: [0.25, 0.4], spin: 0.00008, rough: 0.6 }),
   createPlanet({ radius: 7, paint: 'mars', res: 1024, bump: 2.0, atmosphere: 0xff8a5a, atmK: 0.35, tilt: [0.3, -0.3], spin: 0.00007 }),
   createPlanet({ radius: 18, paint: 'jupiter', res: 1024, atmosphere: 0xf2b27a, atmK: 0.18, tilt: [0.1, 0.1], spin: 0.00012 }),
   createPlanet({ radius: 12, paint: 'saturn', res: 1024, atmosphere: 0xe9cf8a, atmK: 0.18, tilt: [0.5, -0.35], spin: 0.0001, rings: { kind: 'saturn', range: [1.35, 2.35] } }),
